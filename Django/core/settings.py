@@ -127,3 +127,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Alfavantage
 ALPHAVANTAGE_API_KEY = os.environ.get('ALPHAVANTAGE_API_KEY', None)
+URL_BASE_ALPHAVANTAGE = 'https://www.alphavantage.co/query'
