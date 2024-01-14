@@ -1,8 +1,10 @@
-from typing import Optional
+import logging
 import requests
+from typing import Optional
 from .models import DailyStockPrices
-
 from core.settings import ALPHAVANTAGE_API_KEY, URL_BASE_ALPHAVANTAGE
+
+logger = logging.getLogger(__name__)
 
 
 def get_time_serie_daily_stock(symbol: str, outputsize: Optional[str] = 'full') -> dict:
@@ -33,7 +35,7 @@ def deserializer_time_serie_daily_stock(data: dict) -> list:
     return list_data
 
 
-def save_time_serie_daily_stock(symbol, outputsize='full'):
+def save_time_serie_daily_stock(symbol: str, outputsize: Optional[str] = 'full'):
     # Get date from API
     data = get_time_serie_daily_stock(symbol, outputsize=outputsize)
     # Deserialize data
@@ -48,3 +50,4 @@ def save_time_serie_daily_stock(symbol, outputsize='full'):
         if data['date'] not in list_already_saved:
             daily_stock = DailyStockPrices(symbol=symbol, **data)
             daily_stock.save()
+    logger.info(f"Saved {len(list_data)} records for {symbol}")
