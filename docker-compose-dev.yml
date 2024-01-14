@@ -5,12 +5,12 @@ services:
         extends:
             file: docker-compose.yml
             service: django-application
-        container_name: app-dev
+        hostname: app-dev
         ports:
             - "${DOCKER_WEB_PORT:-8000}:8000"
         build:
             target: dev
         volumes:
-            - "./:/app"
+            - "./Django:/app"
         # Force the container to stay alive
         tty: true

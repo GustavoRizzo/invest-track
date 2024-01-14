@@ -7,7 +7,7 @@ services:
       dockerfile: "Dockerfile"
       args:
         - PYTHON_VERSION
-    container_name: app
+    hostname: app
     restart: unless-stopped
     env_file:
       - '.env'
