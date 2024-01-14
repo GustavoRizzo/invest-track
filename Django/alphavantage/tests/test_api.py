@@ -1,8 +1,11 @@
+import datetime
+from decimal import Decimal
 from django.test import TestCase
 from unittest.mock import patch, MagicMock
 
 from ..api import get_time_serie_daily_stock, save_time_serie_daily_stock
 from .data.time_serie_daily import TIME_SERIE_DAILY_MOCK
+from ..models import DailyStockPrices
 
 
 class Test(TestCase):
@@ -41,3 +44,22 @@ class Test(TestCase):
         self.assertIsInstance(float(values['4. close']), float)
         self.assertIsInstance(float(values['5. volume']), float)
 
+    @patch('alphavantage.api.get_time_serie_daily_stock')
+    def test_save_time_serie_daily_stock(self, mock_get_time_serie_daily_stock):
+        # Mocking the response
+        mock_get_time_serie_daily_stock.return_value = TIME_SERIE_DAILY_MOCK
+        # Arrange
+        symbol = 'ITUB4.SA'
+        # Act
+        save_time_serie_daily_stock(symbol)
+        # Assert
+        mock_get_time_serie_daily_stock.assert_called_once()
+        # Check data was saved
+        list_data = DailyStockPrices.objects.all()
+        self.assertEqual(len(list_data), 2)
+        self.assertEqual(list_data[0].symbol, symbol)
+        self.assertEqual(list_data[0].date, datetime.date(2024, 1, 12))
+        self.assertEqual(list_data[0].closing_price, Decimal('33.39'))
+        self.assertEqual(list_data[1].symbol, symbol)
+        self.assertEqual(list_data[1].date, datetime.date(2024, 1, 11))
+        self.assertEqual(list_data[1].closing_price, Decimal('33.35'))
