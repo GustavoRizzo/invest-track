@@ -53,8 +53,8 @@ stop-dev:  ## Restart service service. Using: SERVICES_DEV
 	@${DOCKER_COMPOSE_DEV} stop ${SERVICES_DEV}
 
 test:  ## Run tests
-	@echo ${DOCKER_COMPOSE_DEV} run --rm ${BACKEND_SERVICE} python manage.py test --settings=kernel.settings_test
-	@${DOCKER_COMPOSE_DEV} run --rm ${BACKEND_SERVICE} python manage.py test --settings=kernel.settings_test
+	@echo ${DOCKER_COMPOSE_DEV} run --rm ${SERVICES_DEV} python manage.py test --settings=core.settings_test
+	@${DOCKER_COMPOSE_DEV} run --rm ${SERVICES_DEV} python manage.py test --settings=core.settings_test
 
 reset-local-db:
 	@echo "Reset database..."
