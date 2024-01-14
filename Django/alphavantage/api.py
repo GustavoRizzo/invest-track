@@ -8,18 +8,15 @@ logger = logging.getLogger(__name__)
 
 
 def get_time_serie_daily_stock(symbol: str, outputsize: Optional[str] = 'full') -> dict:
-
     params = {
         'function': 'TIME_SERIES_DAILY',
         'symbol': symbol,
         'outputsize': outputsize,
         'apikey': ALPHAVANTAGE_API_KEY,
     }
-
     url = requests.Request('GET', URL_BASE_ALPHAVANTAGE, params=params).prepare().url
     response = requests.get(url)
     data = response.json()
-
     return data
 
 
