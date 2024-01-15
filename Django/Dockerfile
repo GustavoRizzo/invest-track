@@ -14,13 +14,13 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY ./requirements.txt requirements.txt
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --upgrade pip setuptools && pip install -r requirements.txt
 
 COPY ./manage.py ./manage.py
 COPY ./ ./
 
 # Use only if we will not share the host volumes
-RUN python manage.py migrate
+# RUN python manage.py migrate
 RUN python manage.py collectstatic --noinput
 
 ## DEV is used in development environment

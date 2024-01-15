@@ -18,6 +18,26 @@ services:
     tty: true
     volumes:
       - static:/app/static  # Map the Django static files directory into the container
+      - app-log-data:/app/logs
+
+  postgres:
+    image: postgres:16.1-alpine
+    init: true
+    hostname: postgres
+    restart: unless-stopped
+    env_file:
+      - '.env'
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME-}
+      POSTGRES_DB: ${DATABASE_NAME-}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD-}
+      PGPASSWORD: ${DATABASE_PASSWORD-}
+      POSTGRES_INITDB_ARGS: ${POSTGRES_INITDB_ARGS-"--lc-collate=C --lc-ctype=C -c shared_buffers=256MB -c log_timezone=UTC -c max_connections=200"}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "${DATABASE_PORT:-5432}:5432"
+
 
   nginx:
     image: nginx:latest
@@ -32,3 +52,5 @@ services:
 
 volumes:
   static:
+  app-log-data:
+  postgres-data:
