@@ -19,8 +19,7 @@ RUN pip install --upgrade pip setuptools && pip install -r requirements.txt
 COPY ./manage.py ./manage.py
 COPY ./ ./
 
-# Use only if we will not share the host volumes
-# RUN python manage.py migrate
+# Static files
 RUN python manage.py collectstatic --noinput
 
 ## DEV is used in development environment
