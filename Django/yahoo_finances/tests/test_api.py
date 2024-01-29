@@ -3,7 +3,7 @@ from datetime import datetime
 from django.test import TestCase
 
 
-from ..api import fetch_and_save_company_data, fetch_company_data, convert_epoch_to_datetime, fetch_stock_history
+from ..api import fetch_and_save_company_data, fetch_and_save_stock_history, fetch_company_data, convert_epoch_to_datetime, fetch_stock_history
 from ..models import Company, DailyStockHistory
 
 
@@ -63,4 +63,21 @@ class Test(TestCase):
         self.assertEqual(daily_stock_history.date.year, 2024)
         self.assertEqual(daily_stock_history.date.month, 1)
         self.assertEqual(daily_stock_history.date.day, 2)
-        
+
+    def test_fetch_and_save_stock_history(self):
+        # Arrange
+        symbol = 'PETR4.SA'
+        start = '2024-01-01'
+        end = '2024-01-07'
+        # Act
+        hist = fetch_and_save_stock_history(symbol, start, end)
+        # Assert
+        self.assertEqual(len(hist), 4)
+        # Arrange 2
+        end = '2024-01-05'
+        # Act 2
+        hist = fetch_and_save_stock_history(symbol, start, end)
+        hist_compete = DailyStockHistory.objects.filter(symbol=symbol)
+        # Assert 2
+        self.assertEqual(len(hist), 3)
+        self.assertEqual(len(hist_compete), 4)

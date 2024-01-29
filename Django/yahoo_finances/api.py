@@ -115,3 +115,23 @@ def fetch_stock_history(symbol: str, start: datetime, end: datetime = datetime.n
     data = ticker.history(start=start, end=end)
     logger.info(f"History fetched with {len(data)} rows")
     return convert_df_yahoo_stock_history_to_DailyStockHistory(symbol, data)
+
+
+def fetch_and_save_stock_history(symbol: str, start: datetime, end: datetime = datetime.now()) -> list[DailyStockHistory]:
+    # Fetch data from Yahoo Finance
+    daily_stock_history_list = fetch_stock_history(symbol, start, end)
+    # Get list of dates already saved
+    list_already_saved = DailyStockHistory.days_with_prices_for_symbol(symbol)
+    list_already_saved = [str(date) for date in list_already_saved]
+    # Save data
+    for daily_stock_history in daily_stock_history_list:
+        # Not save if already exists on db
+        if str(daily_stock_history.date) not in list_already_saved:
+            try:
+                daily_stock_history.save()
+            except IntegrityError:
+                logger.info(f"DailyStockHistory {daily_stock_history} already exists, skipping")
+            except ValidationError:
+                logger.info(f"DailyStockHistory {daily_stock_history} already exists, skipping")
+    logger.info(f"Saved {len(daily_stock_history_list)} records for {symbol}")
+    return daily_stock_history_list

@@ -43,3 +43,7 @@ class DailyStockHistory(models.Model):
 
     def __str__(self):
         return f"{self.symbol} - {self.date} - R${self.close:.2f}"
+
+    @classmethod
+    def days_with_prices_for_symbol(cls, symbol: str) -> list:
+        return list(cls.objects.filter(symbol=symbol).values_list('date', flat=True))
