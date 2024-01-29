@@ -27,3 +27,19 @@ class Company(models.Model):
 
     def __str__(self):
         return self.symbol
+
+
+class DailyStockHistory(models.Model):
+    symbol = models.CharField(max_length=10, db_index=True)
+    date = models.DateField(null=False, db_index=True)
+    open = models.DecimalField(max_digits=10, decimal_places=2, null=False)
+    high = models.DecimalField(max_digits=10, decimal_places=2, null=False)
+    low = models.DecimalField(max_digits=10, decimal_places=2, null=False)
+    close = models.DecimalField(max_digits=10, decimal_places=2, null=False)
+    volume = models.IntegerField(null=False)
+    dividends = models.DecimalField(max_digits=10, decimal_places=6)
+    splits = models.DecimalField(max_digits=10, decimal_places=6)
+    load_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.symbol} - {self.date} - R${self.close:.2f}"
