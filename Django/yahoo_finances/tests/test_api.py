@@ -7,7 +7,7 @@ from ..api import fetch_and_save_company_data, fetch_company_data, convert_epoch
 from ..models import Company
 
 
-class BTest(TestCase):
+class Test(TestCase):
 
     def test_convert_epoch_to_datetime(self):
         # Arrange
