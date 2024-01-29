@@ -3,8 +3,8 @@ from datetime import datetime
 from django.test import TestCase
 
 
-from ..api import fetch_and_save_company_data, fetch_company_data, convert_epoch_to_datetime
-from ..models import Company
+from ..api import fetch_and_save_company_data, fetch_company_data, convert_epoch_to_datetime, fetch_stock_history
+from ..models import Company, DailyStockHistory
 
 
 class Test(TestCase):
@@ -48,3 +48,19 @@ class Test(TestCase):
         company = Company.objects.get(symbol=symbol)
         # Assert
         self.assertNotEqual(company.country, 'fake country')
+
+    def test_fetch_stock_history(self):
+        # Arrange
+        symbol = 'PETR4.SA'
+        start = '2024-01-01'
+        end = '2024-01-07'
+        # Act
+        hist = fetch_stock_history(symbol, start, end)
+        # Assert
+        daily_stock_history = hist[0]
+        self.assertIsInstance(daily_stock_history, DailyStockHistory)
+        self.assertEqual(daily_stock_history.symbol, symbol)
+        self.assertEqual(daily_stock_history.date.year, 2024)
+        self.assertEqual(daily_stock_history.date.month, 1)
+        self.assertEqual(daily_stock_history.date.day, 2)
+        
