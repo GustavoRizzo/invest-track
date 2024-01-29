@@ -23,6 +23,7 @@ class Company(models.Model):
     time_zone_short_name = models.CharField(max_length=50)
     financial_currency = models.CharField(max_length=10)
     long_business_summary = models.TextField()
+    load_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.symbol
