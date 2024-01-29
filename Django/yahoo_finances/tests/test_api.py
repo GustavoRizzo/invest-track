@@ -11,12 +11,12 @@ class BTest(TestCase):
 
     def test_convert_epoch_to_datetime(self):
         # Arrange
-        petr4_dict = {
+        vale3sa_dict = {
             'firstTradeDateEpochUtc': 946900800,
             'timeZoneFullName': 'America/Sao_Paulo',
         }
-        epoch_utc = petr4_dict['firstTradeDateEpochUtc']
-        timezone_name = petr4_dict['timeZoneFullName']
+        epoch_utc = vale3sa_dict['firstTradeDateEpochUtc']
+        timezone_name = vale3sa_dict['timeZoneFullName']
         # Act
         date = convert_epoch_to_datetime(epoch_utc, timezone_name)
         # Assert
