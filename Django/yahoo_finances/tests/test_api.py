@@ -33,3 +33,18 @@ class Test(TestCase):
         # Assert
         self.assertIsInstance(company, Company)
         self.assertEqual(company.symbol, symbol)
+
+    def test_fetch_and_save_company_data_if_Company_already_exists_update(self):
+        # Arrange
+        symbol = 'PETR4.SA'
+        # Act (save firt time)
+        company = fetch_and_save_company_data(symbol)
+        # Assert
+        self.assertEqual(company.country, 'Brazil')
+        # Act 2 (change country, and fecth again)
+        company.country = 'fake country'
+        company.save()
+        _ = fetch_and_save_company_data(symbol)
+        company = Company.objects.get(symbol=symbol)
+        # Assert
+        self.assertNotEqual(company.country, 'fake country')

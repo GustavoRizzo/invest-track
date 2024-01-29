@@ -62,14 +62,15 @@ def fetch_company_data(symbol: str) -> Company:
 
 def fetch_and_save_company_data(symbol: str) -> Company:
     # Fetch data from Yahoo Finance
-    new_company = fetch_company_data(symbol)
-    new_symbol = new_company.symbol
-    # Check Company already exists on db, update if exists
+    company = fetch_company_data(symbol)
+    symbol = company.symbol
+    # Check Company already exists on db, if exist delete and create again
     try:
-        company = Company.objects.get(symbol=new_symbol)
-        company.__dict__.update(new_company.__dict__)
+        old_company = Company.objects.get(symbol=symbol)
+        logger.info(f"Company {symbol} already exists, deleting and creating again")
+        old_company.delete()
     except Company.DoesNotExist:
-        company = new_company
+        pass
 
     # Save
     company.save()
