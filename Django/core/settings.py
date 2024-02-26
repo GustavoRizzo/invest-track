@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-n)h7y^%$$s4h2(b=7x34%t%dmhge*5mx0q72y9woa$b7tuk&ku
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '::1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '::1', '*']
 
 
 # Application definition
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'alphavantage',
     'yahoo_finances',
+    'dashboard',
 ]
 
 MIDDLEWARE = [

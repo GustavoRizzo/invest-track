@@ -1,5 +1,6 @@
 Django==5.0.1
 gunicorn==21.2.0
 requests==2.31.0
+selenium==4.18.1
 psycopg2-binary==2.9.9
 yfinance==0.2.36

@@ -50,6 +50,12 @@ services:
     depends_on:
       - django-application
 
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: selenium
+    ports:
+      - "4444:4444"
+
 volumes:
   static:
   app-log-data:
