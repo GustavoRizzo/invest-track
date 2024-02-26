@@ -1,0 +1,65 @@
+<!-- company_details.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalhes da Empresa</title>
+    <!-- Inclua seus scripts e estilos para gráficos aqui -->
+</head>
+<body>
+    <h1>Detalhes da Empresa</h1>
+    <table>
+        <tr>
+            <th>Symbol</th>
+            <td>{{ company.symbol }}</td>
+        </tr>
+        <tr>
+            <th>Nome</th>
+            <td>{{ company.long_name }}</td>
+        </tr>
+        <!-- Adicione mais detalhes da empresa conforme necessário -->
+    </table>
+
+    <!-- Gráfico de Linha para DailyStockHistory.close -->
+    <div>
+        <canvas id="line-chart"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Obtenha os dados do Django e formate-os para o Chart.js
+        var dates = [];
+        var closes = [];
+
+        {% for item in stock_history %}
+            dates.push("{{ item.date }}");
+            closes.push("{{ item.close }}");
+        {% endfor %}
+
+        // Crie o gráfico de linha
+        var ctx = document.getElementById('line-chart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Fechamento Diário',
+                    data: closes,
+                    borderColor: 'blue',
+                    borderWidth: 1,
+                    fill: false
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+</body>
+</html>

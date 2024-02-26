@@ -21,4 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     # Core
     path('dashboard/', include('dashboard.urls')),
+    # Yahoo Finances
+    path('yahoo-finances/', include('yahoo_finances.urls')),
 ]
