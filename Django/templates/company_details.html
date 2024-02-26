@@ -8,21 +8,33 @@
 </head>
 <body>
     <h1>Detalhes da Empresa</h1>
-    <table>
-        <tr>
-            <th>Symbol</th>
-            <td>{{ company.symbol }}</td>
-        </tr>
-        <tr>
-            <th>Nome</th>
-            <td>{{ company.long_name }}</td>
-        </tr>
-        <!-- Adicione mais detalhes da empresa conforme necessário -->
-    </table>
+    <div id="content">
+        <table id="info-table">
+            <tr>
+                <th>Symbol</th>
+                <td>{{ company.symbol }}</td>
+            </tr>
+            <tr>
+                <th>Nome</th>
+                <td>{{ company.long_name }}</td>
+            </tr>
+            <tr>
+                <th>Website</th>
+                <td>{{ company.website }}</td>
+            <tr>
+                <th>Setor</th>
+                <td>{{ company.sector }}</td>
+            </tr>
+            <tr>
+                <th>Indústria</th>
+                <td>{{ company.industry }}</td>
+            </tr>
+        </table>
 
-    <!-- Gráfico de Linha para DailyStockHistory.close -->
-    <div>
-        <canvas id="line-chart"></canvas>
+        <!-- Gráfico de Linha para DailyStockHistory.close -->
+        <div id="line-chart-container">
+            <canvas id="line-chart"></canvas>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -61,5 +73,19 @@
             }
         });
     </script>
+    <style>
+        #content {
+            margin-top: 20px;
+            display: flex  ;
+        }
+        @media (max-width: 600px) {
+            #content {
+                flex-direction: column;
+            }
+        }
+        #info-table {
+            margin-bottom: 20px;
+        }
 </body>
 </html>
+
