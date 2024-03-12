@@ -1,0 +1,123 @@
+[
+    {
+        "model": "ativa_investimentos.stockposition",
+        "pk": 1,
+        "fields": {
+            "created_at": "2024-03-12T01:29:50.232Z",
+            "is_active": true,
+            "is_deleted": false,
+            "symbol": "ASAI3",
+            "quantity": 310
+        }
+    },
+    {
+        "model": "ativa_investimentos.stockposition",
+        "pk": 2,
+        "fields": {
+            "created_at": "2024-03-12T01:30:05.621Z",
+            "is_active": true,
+            "is_deleted": false,
+            "symbol": "B3SA3",
+            "quantity": 600
+        }
+    },
+    {
+        "model": "ativa_investimentos.stockposition",
+        "pk": 3,
+        "fields": {
+            "created_at": "2024-03-12T01:30:16.430Z",
+            "is_active": true,
+            "is_deleted": false,
+            "symbol": "GFSA3",
+            "quantity": 55
+        }
+    },
+    {
+        "model": "ativa_investimentos.stockposition",
+        "pk": 4,
+        "fields": {
+            "created_at": "2024-03-12T01:30:32.441Z",
+            "is_active": true,
+            "is_deleted": false,
+            "symbol": "MGLU3",
+            "quantity": 1100
+        }
+    },
+    {
+        "model": "ativa_investimentos.stockposition",
+        "pk": 5,
+        "fields": {
+            "created_at": "2024-03-12T01:30:49.391Z",
+            "is_active": true,
+            "is_deleted": false,
+            "symbol": "OUJP11",
+            "quantity": 9
+        }
+    },
+    {
+        "model": "ativa_investimentos.stockposition",
+        "pk": 6,
+        "fields": {
+            "created_at": "2024-03-12T01:31:39.841Z",
+            "is_active": true,
+            "is_deleted": false,
+            "symbol": "PETZ3",
+            "quantity": 850
+        }
+    },
+    {
+        "model": "ativa_investimentos.stockposition",
+        "pk": 7,
+        "fields": {
+            "created_at": "2024-03-12T01:31:53.951Z",
+            "is_active": true,
+            "is_deleted": false,
+            "symbol": "QUAL3",
+            "quantity": 438
+        }
+    },
+    {
+        "model": "ativa_investimentos.stockposition",
+        "pk": 8,
+        "fields": {
+            "created_at": "2024-03-12T01:32:09.591Z",
+            "is_active": true,
+            "is_deleted": false,
+            "symbol": "RAIZ4",
+            "quantity": 815
+        }
+    },
+    {
+        "model": "ativa_investimentos.stockposition",
+        "pk": 9,
+        "fields": {
+            "created_at": "2024-03-12T01:32:35.522Z",
+            "is_active": true,
+            "is_deleted": false,
+            "symbol": "RDOR3",
+            "quantity": 386
+        }
+    },
+    {
+        "model": "ativa_investimentos.stockposition",
+        "pk": 10,
+        "fields": {
+            "created_at": "2024-03-12T01:32:52.451Z",
+            "is_active": true,
+            "is_deleted": false,
+            "symbol": "UCAS3",
+            "quantity": 800
+        }
+    },
+    {
+        "model": "ativa_investimentos.stockposition",
+        "pk": 11,
+        "fields": {
+            "created_at": "2024-03-12T01:33:17.941Z",
+            "is_active": true,
+            "is_deleted": false,
+            "symbol": "XPBR31",
+            "quantity": 3
+        }
+    }
+]
