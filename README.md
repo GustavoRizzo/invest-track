@@ -58,6 +58,12 @@ python manage.py shell
 ```
 
 ```python
-from ativa_investimentos.scripts.load_all_company_info import main
-main()
+# Load Company Data
+from ativa_investimentos.scripts.load_all_company_info import main as load_all_company_info
+load_all_company_info()
+# Load Daily Stock History
+from ativa_investimentos.scripts.load_all_daily_stock_history import main as load_all_daily_stock_history
+start = '2018-01-01'
+end = '2024-03-12'
+load_all_daily_stock_history(start, end)
 ```
