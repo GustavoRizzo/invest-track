@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'alphavantage',
     'yahoo_finances',
     'dashboard',
+    'ativa_investimentos',
 ]
 
 MIDDLEWARE = [
