@@ -33,19 +33,31 @@ make setup
 
 To create the local environment:
 
-````shell
+```shell
 pyenv local && pyenv install
 virtualenv --python=`pyenv which python` venv
 source venv/bin/activate
 pip install pip setuptools --upgrade
 pip install -r Django/requirements.txt
-````
+```
 
 to run the first time:
 
-````shell
+```shell
 cd Django
 python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
-````
+```
+
+## To load all Company data for you StockPosition
+Run in the Django shell:
+
+```shell
+python manage.py shell
+```
+
+```python
+from ativa_investimentos.scripts.load_all_company_info import main
+main()
+```
