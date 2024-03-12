@@ -1,4 +1,5 @@
 Django==5.0.1
+django_auditlog==2.3.0
 gunicorn==21.2.0
 requests==2.31.0
 selenium==4.18.1
