@@ -45,6 +45,9 @@
             scales: {
                 x: {
                     type: 'time', // Especificar o tipo de escala como tempo
+                    time: {
+                        unit: 'month', // Exibir as barras de intervalo em meses
+                    },
                     ticks: {
                         autoSkip: true, // Pular automaticamente as etiquetas do eixo X se houver muitas
                         maxTicksLimit: 10 // Limitar o número máximo de etiquetas do eixo X
