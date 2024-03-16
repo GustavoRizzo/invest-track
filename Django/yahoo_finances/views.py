@@ -28,6 +28,5 @@ def multiple_normalized_companies(request):
     stocks = []
     for symbol in symbols:
         stock_history = DailyStockHistory.objects.get_normalized_close('2024-01-01', symbol)
-        test = stock_history.first()
         stocks.append({'symbol': symbol, 'stock_history': stock_history})
     return render(request, 'multiple_normalized_companies.html', {'stocks': stocks})

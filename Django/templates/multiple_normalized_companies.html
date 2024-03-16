@@ -24,12 +24,14 @@
 
 
         // Iterar sobre os dados passados pelo Django
-        {% for company in companies %}
+        {% for stock in stocks %}
             var stockHistoryData = {
-                label: '{{ company.symbol }}',
-                data: [ {% for history in company.stock_history %}
-                    { x: '{{ history.date }}', y: {{ history.normalized_close }} },
-                {% endfor %} ],
+                label: '{{ stock.symbol }}',
+                data: [ 
+                    {% for history in stock.stock_history %}
+                        { x: '{{ history.date }}', y: {{ history.normalized_close }} },
+                    {% endfor %} 
+                    ],
                 borderColor: getRandomColor(), // Cor aleatória para cada conjunto de dados
                 fill: false, // Não preencher a área sob a linha
                 cubicInterpolationMode: 'monotone',
