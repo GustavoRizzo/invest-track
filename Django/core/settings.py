@@ -40,6 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'auditlog',
+    'drf_yasg',
+    'rest_framework',
+    # My apps
     'alphavantage',
     'yahoo_finances',
     'dashboard',
