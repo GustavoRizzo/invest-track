@@ -1,10 +1,11 @@
+from datetime import datetime
 from django.db import models
 from django.db.models import Manager, F
 
 
 class DailyStockHistoryManager(Manager):
 
-    def get_normalized_close(self, start_date, symbol: str) -> models.QuerySet:
+    def get_normalized_close(self, start_date: str, symbol: str) -> models.QuerySet:
         """
         Get the normalized close price for a given symbol and start date.
         The normalized close price is calculated as the close price divided by the first day's close price.
@@ -14,6 +15,8 @@ class DailyStockHistoryManager(Manager):
         Returns:
             - models.QuerySet: A queryset with the normalized close price annotated as 'normalized_close'.
         """
+        # Raise an error if the start date is not a str
+        assert isinstance(start_date, str), f"start_date must be a string, not {type(start_date)}"
         # Get the first record for the symbol to calculate the normalization factor
         first_record = self.filter(symbol=symbol, date__gte=start_date).order_by('date').first()
         # If no record found, return empty queryset
