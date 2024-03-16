@@ -1,4 +1,32 @@
 from django.db import models
+from django.db.models import Manager, F
+
+
+class DailyStockHistoryManager(Manager):
+
+    def get_normalized_close(self, start_date, symbol: str) -> models.QuerySet:
+        """
+        Get the normalized close price for a given symbol and start date.
+        The normalized close price is calculated as the close price divided by the first day's close price.
+        Parameters:
+            - start_date (str): The start date to calculate the normalized close price.
+            - symbol (str): The stock symbol to calculate the normalized close price.
+        Returns:
+            - models.QuerySet: A queryset with the normalized close price annotated as 'normalized_close'.
+        """
+        # Get the first record for the symbol to calculate the normalization factor
+        first_record = self.filter(symbol=symbol, date__gte=start_date).order_by('date').first()
+        # If no record found, return empty queryset
+        if not first_record:
+            return self.none()
+        # Calculate normalization factor based on the first day's close price
+        normalization_factor = first_record.close
+        # Raise an error if the normalization factor is zero
+        if normalization_factor == 0:
+            raise ValueError(f"Normalization factor is zero for {symbol}, date: {first_record.date}")
+        # Annotate the queryset with normalized close price
+        return self.filter(symbol=symbol, date__gte=start_date) \
+            .annotate(normalized_close=((F('close') / normalization_factor)*100))
 
 
 class Company(models.Model):
@@ -40,6 +68,8 @@ class DailyStockHistory(models.Model):
     dividends = models.DecimalField(max_digits=10, decimal_places=6)
     splits = models.DecimalField(max_digits=10, decimal_places=6)
     load_date = models.DateTimeField(auto_now_add=True)
+
+    objects = DailyStockHistoryManager()
 
     def __str__(self):
         return f"{self.symbol} - {self.date} - R${self.close:.2f}"
