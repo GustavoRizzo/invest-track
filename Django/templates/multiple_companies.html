@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiple Companies Chart</title>
+    <!-- Incluir o arquivo Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- Elemento onde o gráfico será renderizado -->
+    <canvas id="multipleCompaniesChart" width="800" height="400"></canvas>
+
+    <script>
+        // Obter o contexto do canvas
+        var ctx = document.getElementById('multipleCompaniesChart').getContext('2d');
+
+        // Dados de exemplo
+        var companiesData = {
+            labels: [], // Rótulos de data
+            datasets: []
+        };
+
+        // Iterar sobre os dados passados pelo Django
+        {% for company in companies %}
+            var stockHistoryData = {
+                label: '{{ company.symbol }}',
+                data: [ {% for history in company.stock_history %}
+                    { x: '{{ history.date }}', y: {{ history.close }} },
+                {% endfor %} ],
+                borderColor: getRandomColor(), // Cor aleatória para cada conjunto de dados
+                fill: false // Não preencher a área sob a linha
+            };
+            companiesData.datasets.push(stockHistoryData);
+        {% endfor %}
+
+        // Configurar o gráfico
+        var options = {
+            scales: {
+                xAxes: [{
+                    type: 'time', // Usar escala de tempo para o eixo X
+                    time: {
+                        unit: 'day' // Exibir as datas no eixo X por dia
+                    },
+                    ticks: {
+                        autoSkip: true, // Pular automaticamente as etiquetas do eixo X se houver muitas
+                        maxTicksLimit: 10 // Limitar o número máximo de etiquetas do eixo X
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: false // Permitir que o eixo Y comece em zero
+                    }
+                }]
+            }
+        };
+
+        // Criar o gráfico de linha
+        var multipleCompaniesChart = new Chart(ctx, {
+            type: 'line',
+            data: companiesData,
+            options: options
+        });
+
+        // Função para gerar uma cor aleatória
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF';
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+    </script>
+</body>
+</html>

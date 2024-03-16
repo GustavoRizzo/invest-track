@@ -3,11 +3,19 @@ from .models import Company, DailyStockHistory
 
 
 def company_details(request, company_id):
-    # Obtenha os detalhes da Company
+    # Get the Company object
     company = get_object_or_404(Company, pk=company_id)
-
-    # Obtenha os dados do DailyStockHistory para essa Company
+    # Get the DailyStockHistory for the Company
     stock_history = DailyStockHistory.objects.filter(symbol=company.symbol)
-
-    # Passe os dados para o template
     return render(request, 'company_details.html', {'company': company, 'stock_history': stock_history})
+
+
+def multiple_companies(request):
+    # Symbols
+    symbols = ['VALE3.SA', 'ASAI3.SA', 'PETR4.SA', 'MGLU3.SA']
+    # Get DailyStockHistory for each symbol
+    companies = []
+    for symbol in symbols:
+        stock_history = DailyStockHistory.objects.filter(symbol=symbol, date__gte='2024-01-01')
+        companies.append({'symbol': symbol, 'stock_history': stock_history})
+    return render(request, 'multiple_companies.html', {'companies': companies})
