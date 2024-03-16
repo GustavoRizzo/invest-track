@@ -6,6 +6,8 @@
     <title>Quote Stocks</title>
     <!-- Incluir o arquivo Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
 </head>
 <body>
     <h1>Qute Stocks</h1>
@@ -41,21 +43,18 @@
         // Configurar o gráfico
         var options = {
             scales: {
-                xAxes: [{
-                    type: 'time', // Usar escala de tempo para o eixo X
-                    time: {
-                        unit: 'day' // Exibir as datas no eixo X por dia
-                    },
+                x: {
+                    type: 'time', // Especificar o tipo de escala como tempo
                     ticks: {
                         autoSkip: true, // Pular automaticamente as etiquetas do eixo X se houver muitas
                         maxTicksLimit: 10 // Limitar o número máximo de etiquetas do eixo X
                     }
-                }],
-                yAxes: [{
+                },
+                y: {
                     ticks: {
                         beginAtZero: false // Permitir que o eixo Y comece em zero
                     }
-                }]
+                }
             }
         };
 

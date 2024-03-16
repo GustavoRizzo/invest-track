@@ -24,6 +24,6 @@ def stock_quote(request):
     # Get DailyStockHistory for each symbol
     stocks = []
     for symbol in symbols:
-        stock_history = DailyStockHistory.objects.get_normalized_close(formatted_date, symbol)
+        stock_history = DailyStockHistory.objects.get_normalized_close(formatted_date, symbol).order_by('date')
         stocks.append({'symbol': symbol, 'stock_history': stock_history})
     return render(request, 'pages/stock_quote.html', {'stocks': stocks})
