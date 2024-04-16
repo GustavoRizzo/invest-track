@@ -1,3 +1,4 @@
 components:
   card: "components/card.html"
   count_button: "components/count_button.html"
+  line_chart: "components/line_chart.html"
