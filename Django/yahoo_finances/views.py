@@ -1,5 +1,16 @@
 from django.shortcuts import render, get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
+
 from .models import Company, DailyStockHistory
+from .serializers import DailyStockHistorySerializer
+
+
+class DailyStockHistoryViewSet(ModelViewSet):
+    queryset = DailyStockHistory.objects.all()
+    serializer_class = DailyStockHistorySerializer
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get']
 
 
 def company_details(request, company_id):
