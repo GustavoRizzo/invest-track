@@ -1,0 +1,20 @@
+<div>
+  <script type="text/javascript">
+    var initial_clicks = {{ initial_clicks|default:0 }} // read the variable
+    console.log('initial_clicks:', initial_clicks, "type:", typeof(initial_clicks))
+    var clicks = initial_clicks
+    function onClick() {
+      clicks += 1
+      console.log('clicks:', clicks)
+      document.getElementById('clicks').innerHTML = clicks
+    }
+  </script>
+  <div class="button">
+    <button type="button" onClick="onClick()">Click me</button>
+  </div>
+  <div class="bger">
+    <p>
+      Clicks: <a id="clicks">{{ initial_clicks|default:0 }}</a>
+    </p>
+  </div>
+</div>
