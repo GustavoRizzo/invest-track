@@ -1,2 +1,3 @@
 components:
   card: "components/card.html"
+  count_button: "components/count_button.html"
