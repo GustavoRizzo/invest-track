@@ -39,10 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Extra apps
     'auditlog',
     'drf_yasg',
     'rest_framework',
-    # My apps
+    'slippers',
+
+    # System apps
     'alphavantage',
     'yahoo_finances',
     'dashboard',
@@ -76,6 +80,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            "builtins": ["slippers.templatetags.slippers"],
         },
     },
 ]
