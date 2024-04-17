@@ -22,3 +22,13 @@ class NormalizedCloseSerializer(serializers.ModelSerializer):
     class Meta:
         model = DailyStockHistory
         fields = ['symbol', 'date', 'close', 'normalized_close']
+
+
+class DateValueSerializer(serializers.Serializer):
+    date = serializers.DateField()
+    value = serializers.FloatField()
+
+
+class StockHistorySerializer(serializers.Serializer):
+    symbol = serializers.CharField()
+    history = DateValueSerializer(many=True)

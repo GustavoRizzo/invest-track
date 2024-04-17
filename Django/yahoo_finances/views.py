@@ -1,13 +1,14 @@
+from django.db.models import F
 from django.shortcuts import render, get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK
+from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_204_NO_CONTENT
 
 from .models import Company, DailyStockHistory
-from .serializers import DailyStockHistorySerializer, InputsNormalizedCloseSerializer, NormalizedCloseSerializer
+from .serializers import DailyStockHistorySerializer, DateValueSerializer, InputsNormalizedCloseSerializer, NormalizedCloseSerializer, StockHistorySerializer
 
 
 class DailyStockHistoryViewSet(ModelViewSet):
@@ -20,6 +21,7 @@ class DailyStockHistoryViewSet(ModelViewSet):
     @action(detail=False, methods=['post'], url_path='normalized', url_name='normalized',
             permission_classes=[IsAuthenticated])
     def get_normalized_close(self, request):
+        # Get the input data
         start_date = request.data.get('start_date')
         symbol = request.data.get('symbol')
         # Validate the input
@@ -29,6 +31,31 @@ class DailyStockHistoryViewSet(ModelViewSet):
         stock_history = DailyStockHistory.objects.get_normalized_close(start_date, symbol)
         serializer_output = NormalizedCloseSerializer(stock_history, many=True)
         return Response(serializer_output.data, status=HTTP_200_OK)
+
+    @swagger_auto_schema(request_body=InputsNormalizedCloseSerializer, responses={200: StockHistorySerializer})
+    @action(detail=False, methods=['post'], url_path='normalized_v2', url_name='normalized_v2',
+            permission_classes=[IsAuthenticated])
+    def get_normalized_close_v2(self, request):
+        print("\n\n---- get_normalized_close_v2 ----\n\n")
+        # Get the input data
+        start_date = request.data.get('start_date')
+        symbol = request.data.get('symbol')
+        # Validate the input
+        serializer_input = InputsNormalizedCloseSerializer(data={'start_date': start_date, 'symbol': symbol})
+        serializer_input.is_valid(raise_exception=True)
+        # Get the normalized close price
+        queryset = DailyStockHistory.objects.get_normalized_close(start_date, symbol)
+        if not queryset:
+            return Response({'error': 'No data found'}, status=HTTP_204_NO_CONTENT)
+        # Convert to a DateValueSerializer
+        print(f"queryset: {queryset}")
+        list = queryset.annotate(value=F('normalized_close')).values('date', 'value')
+        print(f"list: {list}")
+        data_value = DateValueSerializer(list, many=True)
+        print(f"data_value: {data_value}")
+        serializer_output = StockHistorySerializer({'symbol': symbol, 'history': data_value.data})
+        return Response(serializer_output.data, status=HTTP_200_OK)
+
 
 
 def company_details(request, company_id):
