@@ -53,7 +53,6 @@ class DailyStockHistoryViewSet(ModelViewSet):
         return Response(serializer_output.data, status=HTTP_200_OK)
 
 
-
 def company_details(request, company_id):
     # Get the Company object
     company = get_object_or_404(Company, pk=company_id)
