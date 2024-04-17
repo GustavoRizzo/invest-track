@@ -1,9 +1,13 @@
 import datetime
+import json
 
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 
+from .utils import get_my_position_stock_normalized
+
+from yahoo_finances.serializers import NormalizedCloseSerializer
 from ativa_investimentos.models import StockPosition
 from yahoo_finances.models import DailyStockHistory
 
@@ -26,4 +30,6 @@ def stock_quote(request):
     for symbol in symbols:
         stock_history = DailyStockHistory.objects.get_normalized_close(formatted_date, symbol).order_by('date')
         stocks.append({'symbol': symbol, 'stock_history': stock_history})
-    return render(request, 'pages/stock_quote.html', {'stocks': stocks})
+    # Using line chart JS
+    stock_history = get_my_position_stock_normalized()
+    return render(request, 'pages/stock_quote.html', {'stocks': stocks, 'stock_history': json.dumps(stock_history)})
