@@ -16,6 +16,6 @@ class CompanyAdmin(admin.ModelAdmin):
 class DailyStockHistoryAdmin(admin.ModelAdmin):
     list_display = ('symbol', 'date', 'open', 'high', 'low', 'close', 'volume', 'dividends', 'splits', 'load_date')
     search_fields = ('symbol', 'date', 'open', 'high', 'low', 'close', 'volume', 'dividends', 'splits', 'load_date')
-    list_filter = ('symbol', 'date', 'open', 'high', 'low', 'close', 'volume', 'dividends', 'splits', 'load_date')
+    list_filter = ('symbol',)
     date_hierarchy = 'date'
     ordering = ('symbol', 'date', 'open', 'high', 'low', 'close', 'volume', 'dividends', 'splits', 'load_date')
