@@ -36,7 +36,6 @@ class DailyStockHistoryViewSet(ModelViewSet):
     @action(detail=False, methods=['post'], url_path='normalized_v2', url_name='normalized_v2',
             permission_classes=[IsAuthenticated])
     def get_normalized_close_v2(self, request):
-        print("\n\n---- get_normalized_close_v2 ----\n\n")
         # Get the input data
         start_date = request.data.get('start_date')
         symbol = request.data.get('symbol')
@@ -48,11 +47,8 @@ class DailyStockHistoryViewSet(ModelViewSet):
         if not queryset:
             return Response({'error': 'No data found'}, status=HTTP_204_NO_CONTENT)
         # Convert to a DateValueSerializer
-        print(f"queryset: {queryset}")
         list = queryset.annotate(value=F('normalized_close')).values('date', 'value')
-        print(f"list: {list}")
         data_value = DateValueSerializer(list, many=True)
-        print(f"data_value: {data_value}")
         serializer_output = StockHistorySerializer({'symbol': symbol, 'history': data_value.data})
         return Response(serializer_output.data, status=HTTP_200_OK)
 
