@@ -9,6 +9,7 @@ app_name = 'yahoo_finances'
 # Module main routes
 router = routers.SimpleRouter()
 router.register(r'daily-stock-history', views.DailyStockHistoryViewSet)
+router.register(r'company', views.CompanyViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

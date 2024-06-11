@@ -2,7 +2,7 @@ from datetime import datetime
 from django.utils import timezone
 from rest_framework import serializers
 
-from .models import DailyStockHistory
+from .models import Company, DailyStockHistory
 
 
 class DailyStockHistorySerializer(serializers.ModelSerializer):
@@ -32,3 +32,9 @@ class DateValueSerializer(serializers.Serializer):
 class StockHistorySerializer(serializers.Serializer):
     symbol = serializers.CharField()
     history = DateValueSerializer(many=True)
+
+
+class CompanySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Company
+        fields = '__all__'

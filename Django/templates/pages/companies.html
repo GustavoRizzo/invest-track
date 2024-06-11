@@ -1,0 +1,10 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+    <h1>Companies</h1>
+    <div x-data="{ data: [] }" x-init="data = await (await fetch('/yahoo-finances/company/', { method: 'GET' })).json(); console.log(data.results[0]); console.log(typeof(data.results))">
+        <template x-for="company in data.results" :key="company.id">
+            <div x-text="`${company.symbol} - ${company.long_name}`"></div>
+        </template>
+
+{% endblock %}

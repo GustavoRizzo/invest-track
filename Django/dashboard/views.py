@@ -33,3 +33,6 @@ def stock_quote(request):
     # Using line chart JS
     stock_history = get_my_position_stock_normalized()
     return render(request, 'pages/stock_quote.html', {'stocks': stocks, 'stock_history': json.dumps(stock_history)})
+
+def companies(request):
+    return render(request, 'pages/companies.html')
