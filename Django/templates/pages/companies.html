@@ -2,21 +2,6 @@
 
 {% block content %}
     <h1>Companies</h1>
-    <span>hello!</span>
-
-    <h2>Testing AlpineJs building a counter</h1>
-    <div x-data="{ count: 0 }">
-        <button x-on:click="count++">Increment</button>     
-        <span x-text="count"></span>
-    </div>
-
-    <h2>Testing AlpineJs building a list</h2>
-    <div x-data="{ companies: ['Apple', 'Google', 'Microsoft'] }">
-        <template x-for="company in companies" :key="company">
-            <div x-text="company"></div>
-        </template>
-
-    <h2>Testing AlpineJs building a list form api</h2>
     <div x-data="{ data: [] }" x-init="data = await (await fetch('/yahoo-finances/company/', { method: 'GET' })).json(); console.log(data.results[0]); console.log(typeof(data.results))">
         <template x-for="company in data.results" :key="company.id">
             <div x-text="`${company.symbol} - ${company.long_name}`"></div>
