@@ -58,6 +58,9 @@ class Company(models.Model):
 
     def __str__(self):
         return self.symbol
+    
+    class Meta:
+        verbose_name_plural = "Companies"
 
 
 class DailyStockHistory(models.Model):
