@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     'slippers',
-    'widget_tweaks',
 
     # System apps
     'alphavantage',
