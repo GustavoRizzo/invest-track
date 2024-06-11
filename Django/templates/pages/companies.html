@@ -1,0 +1,12 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+    <h1>Companies</h1>
+    <span>hello!</span>
+
+    <h1>Testing AlpineJs building a counter</h1>
+    <div x-data="{ count: 0 }">
+        <button x-on:click="count++">Increment</button>     
+        <span x-text="count"></span>
+    </div>
+{% endblock %}
