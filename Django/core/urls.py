@@ -38,7 +38,7 @@ urlpatterns = [
     # Django Rest Framework
     path('api-auth/', include('rest_framework.urls')),
     # Core
-    path('dashboard/', include('dashboard.urls')),
+    path('', include('dashboard.urls')),
     # Yahoo Finances
     path('yahoo-finances/', include('yahoo_finances.urls')),
     # Ativa Investimentos

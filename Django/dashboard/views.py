@@ -12,6 +12,10 @@ from ativa_investimentos.models import StockPosition
 from yahoo_finances.models import DailyStockHistory
 
 
+def home(request):
+    return render(request, 'pages/home.html')
+
+
 def current_datetime(request):
     now = datetime.datetime.now()
     html = """<html><title>Current Time</title><body>It is now %s.</body><style>body {background-color: #637ed6;}</style></html>""" % now
@@ -33,6 +37,7 @@ def stock_quote(request):
     # Using line chart JS
     stock_history = get_my_position_stock_normalized()
     return render(request, 'pages/stock_quote.html', {'stocks': stocks, 'stock_history': json.dumps(stock_history)})
+
 
 def companies(request):
     return render(request, 'pages/companies.html')
