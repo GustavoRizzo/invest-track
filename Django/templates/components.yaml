@@ -4,3 +4,4 @@ components:
   header: "components/header.html"
   line_chart: "components/line_chart.html"
   line_chart_js: "components/line_chart_js.html"
+  section_stocks: "sections/stocks.html"
