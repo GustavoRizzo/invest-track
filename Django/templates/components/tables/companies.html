@@ -1,0 +1,33 @@
+    {% comment %} Table companies Component {% endcomment %}
+    <div 
+        x-data="{ companies: [] }"
+        x-init = "fetch('{% url 'yahoo_finances:company-list' %}').then(response => response.json()).then(json => companies = json.results);"
+        id="table-companies-component"
+    >
+        {% comment %} If Not laod yet {% endcomment %}
+        <div x-show="companies.length === 0">
+            Carregando lista de companies...
+        </div>
+            
+        {% comment %} If laod {% endcomment %}
+        <table x-show="companies.length > 0">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Name</th>
+                    <th>País</th>
+                    <th>Setor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <template x-for="company in companies" :key="company.id">
+                    <tr>
+                        <td x-text="company.symbol"></td>
+                        <td x-text="company.long_name"></td>
+                        <td x-text="company.country"></td>
+                        <td x-text="company.sector"></td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
+    </div>
