@@ -1,5 +1,6 @@
 components:
   card: "components/card.html"
   count_button: "components/count_button.html"
+  header: "components/header.html"
   line_chart: "components/line_chart.html"
   line_chart_js: "components/line_chart_js.html"
