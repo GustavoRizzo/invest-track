@@ -1,3 +1,4 @@
+import time
 from django.db.models import F
 from django.shortcuts import render, get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
@@ -93,6 +94,8 @@ class CompanyViewSet(ModelViewSet):
 
 class FixedDataView(APIView):
     def post(self, request):
+        # Deley 5 seconds
+        time.sleep(2)
         data = [
             {
                 "symbol": "VALE3.SA",
