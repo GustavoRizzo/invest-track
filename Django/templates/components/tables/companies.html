@@ -1,7 +1,7 @@
     {% comment %} Table companies Component {% endcomment %}
     <div 
-        x-data="{ companies: [] }"
-        x-init = "fetch('{% url 'yahoo_finances:company-list' %}').then(response => response.json()).then(json => companies = json.results);"
+        x-data="tableData()"
+        x-init = "fetchData()"
         id="table-companies-component"
     >
         {% comment %} If Not laod yet {% endcomment %}
@@ -31,3 +31,17 @@
             </tbody>
         </table>
     </div>
+
+    <script>
+        console.log('Table Companies Component');
+        function tableData() {
+            return {
+                companies: [],
+                fetchData() {
+                    fetch('{% url 'yahoo_finances:company-list' %}')
+                        .then(response => response.json())
+                        .then(json => this.companies = json.results);
+                }
+            }
+        }
+    </script>
