@@ -11,7 +11,7 @@
 <script>
     console.log('Line Chart Normalized V2 Alpine js');
     function chartData() {
-        console.log('chartData');
+        //console.log('chartData');
         return {
             stockHistoryList: [],
             companiesData: {
@@ -19,18 +19,28 @@
                 datasets: [],
             },
             fetchData() {
-                console.log('Fetching data...');
-                fetch('{% url 'yahoo_finances:fixed_data' %}')
+                //console.log('Fetching data...');
+                fetch('{% url 'yahoo_finances:fixed_data' %}', {
+                    method: 'POST',
+
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Token ca29e7bdcb6370ff5026dea74c308713c29f208c'
+                    },
+                    body: JSON.stringify({
+                        'symbols': ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA'],
+                    })
+                })
                     .then(response => response.json())
                     .then(data => {
-                        console.log('Data fetched:', data);
+                        //console.log('Data fetched:', data);
                         this.stockHistoryList = data;
                         this.updateChart();
                     })
                     .catch(error => console.error('Error fetching data:', error));
             },
             updateChart() {
-                console.log('Updating chart with data:', this.stockHistoryList);
+                //console.log('Updating chart with data:', this.stockHistoryList);
                 this.stockHistoryList.forEach(stock => {
                     const stockHistoryData = {
                         label: stock.symbol,

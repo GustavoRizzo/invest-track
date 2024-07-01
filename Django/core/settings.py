@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'auditlog',
     'drf_yasg',
     'rest_framework',
+    'rest_framework.authtoken',
     'slippers',
 
     # System apps
@@ -89,7 +90,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
 }
 
 # Database
