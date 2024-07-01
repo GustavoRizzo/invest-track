@@ -16,4 +16,5 @@ urlpatterns = [
     path('company-details/<int:company_id>/', views.company_details, name='company_details'),
     path('multiple-companies/', views.multiple_companies, name='multiple_companies'),
     path('multiple-normalized-companies/', views.multiple_normalized_companies, name='multiple_normalized_companies'),
+    path('fixed-data/', views.FixedDataView.as_view(), name='fixed_data'),
 ]

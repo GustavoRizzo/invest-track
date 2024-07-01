@@ -1,0 +1,84 @@
+<!-- Incluir o arquivo Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+<!-- Elemento onde o gráfico será renderizado -->
+<h1>Line Chart Normalized V2 Alpine js</h1>
+<canvas id="line-chart-js" width="800" height="400"></canvas>
+
+<canvas id="line-chart-js" width="800" height="400" x-data="chartData()" x-init="fetchData()"></canvas>
+
+<script>
+    console.log('Line Chart Normalized V2 Alpine js');
+    function chartData() {
+        console.log('chartData');
+        return {
+            stockHistoryList: [],
+            companiesData: {
+                labels: [],
+                datasets: [],
+            },
+            fetchData() {
+                console.log('Fetching data...');
+                fetch('{% url 'yahoo_finances:fixed_data' %}')
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Data fetched:', data);
+                        this.stockHistoryList = data;
+                        this.updateChart();
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+            },
+            updateChart() {
+                console.log('Updating chart with data:', this.stockHistoryList);
+                this.stockHistoryList.forEach(stock => {
+                    const stockHistoryData = {
+                        label: stock.symbol,
+                        data: stock.history.map(item => {
+                            return { x: item.date, y: item.value };
+                        }),
+                        borderColor: this.getRandomColor(),
+                        fill: false,
+                        cubicInterpolationMode: 'monotone',
+                    };
+                    this.companiesData.datasets.push(stockHistoryData);
+                });
+
+                const ctx = document.getElementById('line-chart-js').getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'line',
+                    data: this.companiesData,
+                    options: {
+                        scales: {
+                            x: {
+                                type: 'time',
+                                time: {
+                                    unit: 'month',
+                                },
+                                ticks: {
+                                    autoSkip: true,
+                                    maxTicksLimit: 10
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    beginAtZero: false
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+            getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+        }
+    }
+    chartData()
+</script>

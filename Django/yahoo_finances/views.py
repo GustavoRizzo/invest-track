@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_204_NO_CONTENT
@@ -33,7 +34,7 @@ class DailyStockHistoryViewSet(ModelViewSet):
         return Response(serializer_output.data, status=HTTP_200_OK)
 
     @swagger_auto_schema(request_body=InputsNormalizedCloseSerializer, responses={200: StockHistorySerializer})
-    @action(detail=False, methods=['post'], url_path='normalized_v2', url_name='normalized_v2',
+    @action(detail=False, methods=['post'], url_path='normalized-v2', url_name='normalized-v2',
             permission_classes=[IsAuthenticated])
     def get_normalized_close_v2(self, request):
         # Get the input data
@@ -88,3 +89,28 @@ class CompanyViewSet(ModelViewSet):
     serializer_class = CompanySerializer
     permission_classes = [IsAuthenticated]
     http_method_names = ['get']
+
+
+class FixedDataView(APIView):
+    def get(self, request):
+        data = [{
+            "symbol": "VALE3.SA",
+            "history": [
+                {"date": "2024-02-01", "value": 100},
+                {"date": "2024-02-02", "value": 97.96886582653818},
+                {"date": "2024-02-05", "value": 97.12379540400296},
+                {"date": "2024-02-06", "value": 98.84358784284656},
+                {"date": "2024-02-07", "value": 99.03632320237213},
+                {"date": "2024-02-08", "value": 98.16160118606375},
+                {"date": "2024-02-09", "value": 97.73165307635286},
+                {"date": "2024-02-14", "value": 97.4351371386212},
+                {"date": "2024-02-15", "value": 97.12379540400296},
+                {"date": "2024-02-16", "value": 100.81541882876205},
+                {"date": "2024-02-19", "value": 100.05930318754633},
+                {"date": "2024-02-20", "value": 97.8650852483321},
+                {"date": "2024-02-21", "value": 98.60637509266122},
+                {"date": "2024-02-22", "value": 99.6590066716086},
+                {"date": "2024-02-23", "value": 99.89621942179392}
+            ]
+        }]
+        return Response(data, status=HTTP_200_OK)
