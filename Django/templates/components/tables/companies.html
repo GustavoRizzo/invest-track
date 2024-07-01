@@ -38,7 +38,14 @@
             return {
                 companies: [],
                 fetchData() {
-                    fetch('{% url 'yahoo_finances:company-list' %}')
+                    fetch(
+                        '{% url 'yahoo_finances:company-list' %}', {
+                            method: 'GET',
+                            headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': 'Token ca29e7bdcb6370ff5026dea74c308713c29f208c',
+                                }
+                        })
                         .then(response => response.json())
                         .then(json => this.companies = json.results);
                 }
