@@ -36,14 +36,15 @@
         console.log('Table Companies Component');
         function tableData() {
             return {
-                companies: [],
+                auth_token: sessionStorage.getItem('auth_token'),
+                companies: [],                
                 fetchData() {
                     fetch(
                         '{% url 'yahoo_finances:company-list' %}', {
                             method: 'GET',
                             headers: {
                                     'Content-Type': 'application/json',
-                                    'Authorization': 'Token ca29e7bdcb6370ff5026dea74c308713c29f208c',
+                                    'Authorization': `Token ${this.auth_token}`,
                                 }
                         })
                         .then(response => response.json())

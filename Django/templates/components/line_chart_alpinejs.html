@@ -13,6 +13,7 @@
 <script>
     function chartData() {
         return {
+            auth_token: sessionStorage.getItem('auth_token'),
             stockHistoryList: [],
             companiesData: {
                 labels: [],
@@ -24,7 +25,7 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': 'Token ca29e7bdcb6370ff5026dea74c308713c29f208c'
+                        'Authorization': `Token ${this.auth_token}`,
                     },
                     body: JSON.stringify({
                         'symbols': ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA'],
