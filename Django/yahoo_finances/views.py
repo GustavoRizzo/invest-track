@@ -93,9 +93,11 @@ class CompanyViewSet(ModelViewSet):
 
 
 class FixedDataView(APIView):
+    @swagger_auto_schema(responses={200: StockHistorySerializer(many=True)})
     def post(self, request):
-        # Deley 5 seconds
-        time.sleep(2)
+        """
+        Get fixed data for the companies VALE3.SA and ASAI3.SA
+        """
         data = [
             {
                 "symbol": "VALE3.SA",
@@ -138,4 +140,5 @@ class FixedDataView(APIView):
                 ]
             }
         ]
-        return Response(data, status=HTTP_200_OK)
+        serializer = StockHistorySerializer(data, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
