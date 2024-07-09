@@ -11,12 +11,23 @@
     <script src="https://unpkg.com/htmx.org@2.0.0" integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw" crossorigin="anonymous"></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-  </head>
 
-  <!-- Save auth_token on session Storage -->
-  <script>
-    sessionStorage.setItem('auth_token', '{{ user.auth_token }}');
-  </script>
+    <!-- Save auth_token/login -->
+    <script>
+      // Verificar se o usuário está autenticado
+      {% if user.is_authenticated %}
+          // Salvar auth_token no sessionStorage
+          sessionStorage.setItem('auth_token', '{{ user.auth_token }}');
+      {% else %}
+          // Exibir popup se o usuário não estiver autenticado
+          window.onload = function() {
+              alert("Usuário não está autenticado. Por favor, faça login.");
+              // Redirecionar para a página de login
+              window.location.href = "{% url 'admin:login' %}";
+          };
+      {% endif %}
+    </script>
+  </head>
 
   {% header %}
   <body class="bg-slate-800 min-h-screen text-white">
@@ -26,5 +37,4 @@
       {% endblock %}
     </main>
   </body>
-  
 </html>
