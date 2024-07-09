@@ -38,10 +38,9 @@
 </div>
 
 <script>
-    console.log('Table Companies Component');
     function tableData() {
         return {
-            auth_token: 'ABC', // sessionStorage.getItem('auth_token'),
+            auth_token: sessionStorage.getItem('auth_token'),
             companies: [],
             loading: false,
             errorMessage: '',
