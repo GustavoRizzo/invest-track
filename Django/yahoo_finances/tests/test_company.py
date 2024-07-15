@@ -16,12 +16,12 @@ class CompanyTest(BaseAPITestCase):
         Company.objects.all().delete()
         DailyStockHistory.objects.all().delete()
 
-    def test_no_data(self):
+    def test_close_history_method(self):
         # Arrange 1
         company = self.create_company()
         daily_stock_history = self.create_daily_stock_history(symbol=company.symbol)
         # Act 1
-        hist = company.close_history(start_date=daily_stock_history.date)
+        hist = company.close_history(start_date=daily_stock_history.date, end_date=daily_stock_history.date)
         # Assert 1
         self.assertEqual(hist.count(), 1)
         self.assertEqual(hist.first().close, daily_stock_history.close)
@@ -34,10 +34,30 @@ class CompanyTest(BaseAPITestCase):
             end_date=date(2024, 1, 10)
         )
         # Act 2
-        hist2 = company2.close_history(start_date=date(2024, 1, 1))
+        hist2 = company2.close_history(start_date=date(2024, 1, 1), end_date=date(2024, 1, 10))
         # Assert 2
         self.assertEqual(hist2.count(), 10)
         self.assertEqual(hist2.first().symbol, company2.symbol)
         self.assertEqual(hist2.first().date, date(2024, 1, 1))
         self.assertEqual(hist2.last().symbol, company2.symbol)
         self.assertEqual(hist2.last().date, date(2024, 1, 10))
+        # Act 3 - geting only 8 days 
+        hist3 = company2.close_history(start_date=date(2024, 1, 2), end_date=date(2024, 1, 9))
+        # Assert 3
+        self.assertEqual(hist3.count(), 8)
+        self.assertEqual(hist3.first().symbol, company2.symbol)
+        self.assertEqual(hist3.first().date, date(2024, 1, 2))
+        self.assertEqual(hist3.last().symbol, company2.symbol)
+        self.assertEqual(hist3.last().date, date(2024, 1, 9))
+        # Act 4 - out of range, will return only the results that are in the range
+        hist4 = company2.close_history(start_date=date(2024, 1, 1), end_date=date(2024, 1, 11))
+        # Assert 4
+        self.assertEqual(hist4.count(), 10)
+        self.assertEqual(hist4.first().symbol, company2.symbol)
+        self.assertEqual(hist4.first().date, date(2024, 1, 1))
+        self.assertEqual(hist4.last().symbol, company2.symbol)
+        self.assertEqual(hist4.last().date, date(2024, 1, 10))
+        # Act 5 - totally out of range, will return an empty queryset
+        hist5 = company2.close_history(start_date=date(2024, 1, 11), end_date=date(2024, 1, 12))
+        # Assert 5
+        self.assertEqual(hist5.count(), 0)
