@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.db import models
-from django.db.models import Manager, F
+from django.db.models import Manager, F, QuerySet
 
 
 class DailyStockHistoryManager(Manager):
@@ -56,6 +56,13 @@ class Company(models.Model):
     long_business_summary = models.TextField()
     load_date = models.DateTimeField(auto_now_add=True)
 
+    def close_history(self, start_date: datetime) -> QuerySet['DailyStockHistory']:
+        return DailyStockHistory.objects.filter(symbol=self.symbol, date__gte=start_date).order_by('date')
+    
+    @property
+    def normalized_close_history(self):
+        return DailyStockHistory.objects.get_normalized_close(start_date='2024-01-01', symbol=self.symbol)
+
     def __str__(self):
         return self.symbol
     
@@ -81,5 +88,5 @@ class DailyStockHistory(models.Model):
         return f"{self.symbol} - {self.date} - R${self.close:.2f}"
 
     @classmethod
-    def days_with_prices_for_symbol(cls, symbol: str) -> list:
-        return list(cls.objects.filter(symbol=symbol).values_list('date', flat=True))
+    def days_with_prices_for_symbol(self, symbol: str) -> list:
+        return list(self.objects.filter(symbol=symbol).values_list('date', flat=True))

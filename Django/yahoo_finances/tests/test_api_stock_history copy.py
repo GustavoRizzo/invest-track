@@ -9,7 +9,7 @@ class ApiStockHistoryTest(BaseAPITestCase):
         # setUpTestData: Run once to set up non-modified data for all class methods.
         super().setUpTestData()
 
-    def test_erro(self):
+    def test_no_content(self):
         # Arrange 1 - Call API without any data       
         data = {
             'start_date': '2024-01-01',
