@@ -62,7 +62,7 @@ class Company(models.Model):
             .order_by('date')
 
     def normalized_close_history(self, start_date: date, end_date: date = None) -> QuerySet['DailyStockHistory']:
-        filter = Q()   
+        filter = Q()
         if end_date:
             filter = Q(date__gte=start_date, date__lte=end_date)
         return DailyStockHistory.objects \

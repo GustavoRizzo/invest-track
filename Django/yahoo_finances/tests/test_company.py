@@ -41,7 +41,7 @@ class CompanyTest(BaseAPITestCase):
         self.assertEqual(hist2.first().date, date(2024, 1, 1))
         self.assertEqual(hist2.last().symbol, company2.symbol)
         self.assertEqual(hist2.last().date, date(2024, 1, 10))
-        # Act 3 - geting only 8 days 
+        # Act 3 - geting only 8 days
         hist3 = company2.close_history(start_date=date(2024, 1, 2), end_date=date(2024, 1, 9))
         # Assert 3
         self.assertEqual(hist3.count(), 8)

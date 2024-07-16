@@ -13,7 +13,7 @@ class Test(TestCase):
     @patch('requests.get')
     def test_get_time_serie_daily_stock(self, mock_requests_get):
         # Mocking the response
-        mock_requests_get.return_value = MagicMock(json=lambda: TIME_SERIE_DAILY_MOCK)#
+        mock_requests_get.return_value = MagicMock(json=lambda: TIME_SERIE_DAILY_MOCK)
         # Arrange
         symbol = 'ITUB4.SA'
         # Act

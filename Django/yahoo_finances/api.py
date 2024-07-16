@@ -117,7 +117,8 @@ def fetch_stock_history(symbol: str, start: datetime, end: datetime = datetime.n
     return convert_df_yahoo_stock_history_to_DailyStockHistory(symbol, data)
 
 
-def fetch_and_save_stock_history(symbol: str, start: datetime, end: datetime = datetime.now()) -> list[DailyStockHistory]:
+def fetch_and_save_stock_history(symbol: str, start: datetime, end: datetime = datetime.now()
+                                 ) -> list[DailyStockHistory]:
     # Fetch data from Yahoo Finance
     daily_stock_history_list = fetch_stock_history(symbol, start, end)
     # Get list of dates already saved

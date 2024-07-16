@@ -17,7 +17,7 @@ class ApiStockHistoryTest(BaseAPITestCase):
         DailyStockHistory.objects.all().delete()
 
     def test_no_content(self):
-        # Arrange 1 - Call API without any data       
+        # Arrange 1 - Call API without any data
         data = {
             'start_date': '2024-01-01',
             'symbol': 'PETR4.SA'

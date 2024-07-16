@@ -17,7 +17,11 @@ try:
     # Start driver
     ############################################
     print("Starting driver...")
-    driver = webdriver.Remote(f"http://{CONTAINER_SELENIUM}:{PORT_SELENIUM}/wd/hub", DesiredCapabilities.CHROME, options=options)
+    driver = webdriver.Remote(
+        f"http://{CONTAINER_SELENIUM}:{PORT_SELENIUM}/wd/hub",
+        DesiredCapabilities.CHROME,
+        options=options
+        )
     print("Driver started")
 
     try:

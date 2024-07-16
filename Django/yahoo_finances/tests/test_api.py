@@ -3,7 +3,8 @@ from datetime import datetime
 from django.test import TestCase
 
 
-from ..api import fetch_and_save_company_data, fetch_and_save_stock_history, fetch_company_data, convert_epoch_to_datetime, fetch_stock_history
+from ..api import fetch_and_save_company_data, fetch_and_save_stock_history, convert_epoch_to_datetime,  \
+    fetch_stock_history
 from ..models import Company, DailyStockHistory
 
 

@@ -35,7 +35,8 @@ class DailyStockHistoryViewSet(ModelViewSet):
         serializer_output = NormalizedCloseSerializer(stock_history, many=True)
         return Response(serializer_output.data, status=HTTP_200_OK)
 
-    @swagger_auto_schema(request_body=InputsNormalizedCloseSerializer, responses={200: StockHistorySerializer(many=True)})
+    @swagger_auto_schema(request_body=InputsNormalizedCloseSerializer,
+                         responses={200: StockHistorySerializer(many=True)})
     @action(detail=False, methods=['post'], url_path='normalized-v2', url_name='normalized-v2',
             permission_classes=[IsAuthenticated])
     def get_normalized_close_v2(self, request):
@@ -163,13 +164,14 @@ class FixedDataView(APIView):
 
 
 class StockHistoryView(APIView):
-    @swagger_auto_schema(request_body=InputsNormalizedCloseSerializer, responses={200: StockHistorySerializer(many=True)})
+    @swagger_auto_schema(request_body=InputsNormalizedCloseSerializer,
+                         responses={200: StockHistorySerializer(many=True)})
     def post(self, request):
         """
         Get fixed data for the companies VALE3.SA and ASAI3.SA
         """
         serializer_input = InputsNormalizedCloseSerializer(data=request.data)
-        serializer_input.is_valid(raise_exception=True)        
+        serializer_input.is_valid(raise_exception=True)
         symbol = serializer_input.validated_data['symbol']
         start_date = serializer_input.validated_data['start_date']
         end_date = serializer_input.validated_data['end_date']
