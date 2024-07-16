@@ -13,6 +13,7 @@ class DailyStockHistorySerializer(serializers.ModelSerializer):
 
 class InputsNormalizedCloseSerializer(serializers.Serializer):
     start_date = serializers.DateField(default=(datetime.today().date() - timezone.timedelta(days=30)))
+    end_date = serializers.DateField(default=datetime.today().date())
     symbol = serializers.CharField(default='VALE3.SA')
 
 

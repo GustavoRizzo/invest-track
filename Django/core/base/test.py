@@ -32,8 +32,9 @@ class BaseAPITestCase(APITestCase):
             symbol = self.fake.word()
         return baker.make(DailyStockHistory, symbol=symbol, date=date)
 
-    def create_company_with_stock_history(self, symbol: str, start_date: date = date(2024, 1, 1), end_date: date = date(2024, 1, 10) ) -> Company:
+    def create_company_with_stock_history(self, symbol: str = None, start_date: date = date(2024, 1, 1), 
+                                          end_date: date = date(2024, 1, 10)) -> Company:
         company = self.create_company(symbol)
         for d in range((end_date - start_date).days + 1):
-            self.create_daily_stock_history(symbol, start_date + timedelta(days=d))
+            self.create_daily_stock_history(company.symbol, start_date + timedelta(days=d))
         return company
