@@ -60,14 +60,19 @@ class Company(models.Model):
         return DailyStockHistory.objects \
             .filter(symbol=self.symbol, date__gte=start_date, date__lte=end_date) \
             .order_by('date')
-    
-    @property
-    def normalized_close_history(self):
-        return DailyStockHistory.objects.get_normalized_close(start_date='2024-01-01', symbol=self.symbol)
+
+    def normalized_close_history(self, start_date: date, end_date: date) -> QuerySet['DailyStockHistory']:
+        # convert date to string
+        start_date = start_date.strftime('%Y-%m-%d')
+        end_date = end_date.strftime('%Y-%m-%d')
+        return DailyStockHistory.objects \
+            .get_normalized_close(start_date=start_date, symbol=self.symbol) \
+            .filter(date__gte=start_date, date__lte=end_date) \
+            .order_by('date')
 
     def __str__(self):
         return self.symbol
-    
+
     class Meta:
         verbose_name_plural = "Companies"
 

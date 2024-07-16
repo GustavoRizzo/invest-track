@@ -61,3 +61,28 @@ class CompanyTest(BaseAPITestCase):
         hist5 = company2.close_history(start_date=date(2024, 1, 11), end_date=date(2024, 1, 12))
         # Assert 5
         self.assertEqual(hist5.count(), 0)
+
+    def test_normalized_close_history_method(self):
+        # Arrange 1
+        date1 = date(2024, 1, 1)
+        date2 = date(2024, 1, 10)
+        company = self.create_company_with_stock_history(
+            symbol=self.fake.word(),
+            start_date=date1,
+            end_date=date2
+        )
+        hist = company.close_history(start_date=date1, end_date=date2)
+        first_record = hist.first()
+        last_record = hist.last()
+        # Changing values
+        first_record.close = 1
+        first_record.save()
+        last_record.close = 2
+        last_record.save()
+        # Act 1
+        hist_normalized = company.normalized_close_history(start_date=date1, end_date=date2)
+        # Assert 1
+        self.assertEqual(hist_normalized.count(), 10)
+        self.assertEqual(hist_normalized.first().symbol, company.symbol)
+        self.assertEqual(hist_normalized.first().normalized_close, 100)
+        self.assertEqual(hist_normalized.last().normalized_close, 200)
