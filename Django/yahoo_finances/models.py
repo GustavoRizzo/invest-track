@@ -5,7 +5,8 @@ from django.db.models import Manager, F, QuerySet, Q
 
 class DailyStockHistoryManager(Manager):
 
-    def get_normalized_close(self, symbol: str, start_date: date, end_date: date = date.today()) -> QuerySet['DailyStockHistory']:
+    def get_normalized_close(self, symbol: str, start_date: date, end_date: date = date.today()
+                             ) -> QuerySet['DailyStockHistory']:
         """
         Get the normalized close price for a given symbol and start date.
         The normalized close price is calculated as the close price divided by the first day's close price.
@@ -67,7 +68,8 @@ class Company(models.Model):
             .filter(symbol=self.symbol, date__gte=start_date, date__lte=end_date) \
             .order_by('date')
 
-    def normalized_close_history(self, start_date: date, end_date: date = date.today()) -> QuerySet['DailyStockHistory']:
+    def normalized_close_history(self, start_date: date, end_date: date = date.today()
+                                 ) -> QuerySet['DailyStockHistory']:
         return DailyStockHistory.objects \
             .get_normalized_close(
                 symbol=self.symbol,

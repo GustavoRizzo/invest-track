@@ -10,7 +10,8 @@ def get_company_serializer_history_data(company: Company, start_date: date, end_
     """
     Recive a Company object and return the close history for the company.
     Return:
-        - serializer (Serializer): The close history for the company of type StockHistorySerializer, or an error message.
+        - serializer (Serializer): The close history for the company of type StockHistorySerializer, or an
+        error message.
         - err (bool): True if there is an error, False otherwise.
     """
     assert isinstance(company, Company), f"company must be a Company object, not {type(company)}"

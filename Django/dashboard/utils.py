@@ -23,8 +23,8 @@ def get_my_position_stock_normalized() -> dict:
     list_stock_history = []
     for symbol in symbols:
         queryset_normalized = DailyStockHistory.objects.get_normalized_close(
-            symbol = symbol, 
-            start_date = formatted_date
+            symbol=symbol,
+            start_date=formatted_date
             ).order_by('date')
         if queryset_normalized:
             list = queryset_normalized.annotate(value=F('normalized_close')).values('date', 'value')
