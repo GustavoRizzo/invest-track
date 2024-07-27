@@ -1,4 +1,5 @@
 import time
+from datetime import datetime, date
 from django.db.models import F
 from django.shortcuts import render, get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
@@ -7,8 +8,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
-from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
 
+from .utils import get_company_serializer_normalized_history_data
 from .models import Company, DailyStockHistory
 from .serializers import CompanySerializer, DailyStockHistorySerializer, DateValueSerializer, \
     InputsNormalizedCloseSerializer, NormalizedCloseSerializer, StockHistorySerializer
@@ -172,19 +174,17 @@ class StockHistoryView(APIView):
         """
         serializer_input = InputsNormalizedCloseSerializer(data=request.data)
         serializer_input.is_valid(raise_exception=True)
-        symbol = serializer_input.validated_data['symbol']
-        start_date = serializer_input.validated_data['start_date']
-        end_date = serializer_input.validated_data['end_date']
+        input_data = serializer_input.validated_data
         # Try to find teh company
-        company = Company.objects.filter(symbol=symbol).first()
+        company = Company.objects.filter(symbol=input_data['symbol']).first()
         if not company:
             return Response({'error': 'Company not found'}, status=HTTP_204_NO_CONTENT)
-        # Get the normalized close price
-        queryset = company.normalized_close_history(start_date=start_date, end_date=end_date)
-        if not queryset:
-            return Response({'error': 'No data found'}, status=HTTP_204_NO_CONTENT)
-        # Convert to a DateValueSerializer
-        list = queryset.annotate(value=F('normalized_close')).values('date', 'value')
-        data_value = DateValueSerializer(list, many=True)
-        serializer_output = StockHistorySerializer({'symbol': company.symbol, 'history': data_value.data})
-        return Response(serializer_output.data, status=HTTP_200_OK)
+        # Get serialized data
+        serializer, err = get_company_serializer_normalized_history_data(
+            company=company,
+            start_date=input_data['start_date'],
+            end_date=input_data.get('end_date', date.today())
+        )
+        if err:
+            return Response(serializer, status=HTTP_400_BAD_REQUEST)
+        return Response(serializer.data, status=HTTP_200_OK)
