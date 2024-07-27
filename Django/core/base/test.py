@@ -18,6 +18,7 @@ class BaseAPITestCase(APITestCase):
 
         # Urls
         cls.url_stock_history = reverse('yahoo_finances:stock_history')
+        cls.url_stock_normalized_history = reverse('yahoo_finances:stock_normalized_history')
 
         # Create users
         cls.test_user = User.objects.create_user(username='tester', password='tester123')

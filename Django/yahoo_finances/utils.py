@@ -19,6 +19,9 @@ def get_company_serializer_normalized_history_data(company: Company, start_date:
         queryset = company.normalized_close_history(start_date=start_date, end_date=end_date)
     except ValueError as e:
         return {'error': str(e)}, True
+    # If queryset is empty, return history equal []
+    if queryset.count() == 0:
+        return StockHistorySerializer({'symbol': company.symbol, 'history': []}), False
     data_list = queryset.annotate(value=F('normalized_close')).values('date', 'value')
     data_value = DateValueSerializer(data_list, many=True)
     serializer_stock_history = StockHistorySerializer({'symbol': company.symbol, 'history': data_value.data})

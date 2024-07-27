@@ -3,7 +3,7 @@ from django.db.models import F
 from django.shortcuts import render, get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
@@ -91,7 +91,7 @@ def multiple_normalized_companies(request):
 class CompanyViewSet(ModelViewSet):
     queryset = Company.objects.all()
     serializer_class = CompanySerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminUser]
     http_method_names = ['get']
 
 
@@ -169,21 +169,50 @@ class StockHistoryView(APIView):
                          responses={200: StockHistorySerializer(many=True)})
     def post(self, request):
         """
-        Get fixed data for the companies VALE3.SA and ASAI3.SA
+        Get stock history for a given symbol
         """
         serializer_input = InputsNormalizedCloseSerializer(data=request.data)
         serializer_input.is_valid(raise_exception=True)
-        input_data = serializer_input.validated_data
-        # Try to find teh company
-        company = Company.objects.filter(symbol=input_data['symbol']).first()
-        if not company:
+        # Try to find the company
+        companys = serializer_input.get_companies()
+        if not companys:
             return Response({'error': 'Company not found'}, status=HTTP_204_NO_CONTENT)
-        # Get serialized data
-        serializer, err = get_company_serializer_normalized_history_data(
-            company=company,
-            start_date=input_data['start_date'],
-            end_date=input_data.get('end_date', date.today())
-        )
-        if err:
-            return Response(serializer, status=HTTP_400_BAD_REQUEST)
-        return Response(serializer.data, status=HTTP_200_OK)
+        list_serializer_data = []
+        # Get serialized data for each company
+        for company in companys:
+            serializer_output, err = get_company_serializer_normalized_history_data(
+                company=company,
+                start_date=serializer_input.validated_data['start_date'],
+                end_date=serializer_input.validated_data.get('end_date', date.today())
+            )
+            if err:
+                return Response(serializer_output, status=HTTP_400_BAD_REQUEST)
+            list_serializer_data.append(serializer_output.data)
+        return Response(StockHistorySerializer(list_serializer_data, many=True).data, status=HTTP_200_OK)
+
+
+class StockNormalizedHistoryView(APIView):
+    @swagger_auto_schema(request_body=InputsNormalizedCloseSerializer,
+                         responses={200: StockHistorySerializer})
+    def post(self, request):
+        """
+        Get normalized stock history for a given symbol
+        """
+        serializer_input = InputsNormalizedCloseSerializer(data=request.data)
+        serializer_input.is_valid(raise_exception=True)
+        # Try to find the company
+        companys = serializer_input.get_companies()
+        if not companys:
+            return Response({'error': 'Company not found'}, status=HTTP_204_NO_CONTENT)
+        list_serializer_data = []
+        # Get serialized data for each company
+        for company in companys:
+            serializer_output, err = get_company_serializer_normalized_history_data(
+                company=company,
+                start_date=serializer_input.validated_data['start_date'],
+                end_date=serializer_input.validated_data.get('end_date', date.today())
+            )
+            if err:
+                return Response(serializer_output, status=HTTP_400_BAD_REQUEST)
+            list_serializer_data.append(serializer_output.data)
+        return Response(StockHistorySerializer(list_serializer_data, many=True).data, status=HTTP_200_OK)

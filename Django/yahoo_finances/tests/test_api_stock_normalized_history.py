@@ -24,7 +24,7 @@ class ApiStockHistoryTest(BaseAPITestCase):
         }
         self.client.force_authenticate(user=self.test_user)
         # Act 1
-        response1 = self.client.post(self.url_stock_history, data)
+        response1 = self.client.post(self.url_stock_normalized_history, data)
         # Assert 1
         self.assertEqual(response1.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -40,7 +40,7 @@ class ApiStockHistoryTest(BaseAPITestCase):
         }
         self.client.force_authenticate(user=self.test_user)
         # Act
-        response = self.client.post(self.url_stock_history, data)
+        response = self.client.post(self.url_stock_normalized_history, data)
         # Assert
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
