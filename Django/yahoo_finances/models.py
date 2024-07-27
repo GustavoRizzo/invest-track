@@ -5,7 +5,7 @@ from django.db.models import Manager, F, QuerySet, Q
 
 class DailyStockHistoryManager(Manager):
 
-    def get_normalized_close(self, start_date: date, symbol: str) -> models.QuerySet:
+    def get_normalized_close(self, symbol: str, start_date: date, end_date: date = date.today()) -> QuerySet['DailyStockHistory']:
         """
         Get the normalized close price for a given symbol and start date.
         The normalized close price is calculated as the close price divided by the first day's close price.
@@ -17,6 +17,7 @@ class DailyStockHistoryManager(Manager):
         """
         # Raise an error if the start date is not a date
         assert isinstance(start_date, date), f"start_date must be a date, not {type(start_date)}"
+        assert isinstance(end_date, date), f"end_date must be a date, not {type(end_date)}"
         # Get the first record for the symbol to calculate the normalization factor
         first_record = self.filter(symbol=symbol, date__gte=start_date).order_by('date').first()
         # If no record found, return empty queryset
@@ -28,7 +29,12 @@ class DailyStockHistoryManager(Manager):
         if normalization_factor == 0:
             raise ValueError(f"Normalization factor is zero for {symbol}, date: {first_record.date}")
         # Annotate the queryset with normalized close price
-        return self.filter(symbol=symbol, date__gte=start_date) \
+        return self \
+            .filter(
+                symbol=symbol,
+                date__gte=start_date,
+                date__lte=end_date
+                ) \
             .annotate(normalized_close=((F('close') / normalization_factor)*100))
 
 
@@ -61,13 +67,13 @@ class Company(models.Model):
             .filter(symbol=self.symbol, date__gte=start_date, date__lte=end_date) \
             .order_by('date')
 
-    def normalized_close_history(self, start_date: date, end_date: date = None) -> QuerySet['DailyStockHistory']:
-        filter = Q()
-        if end_date:
-            filter = Q(date__gte=start_date, date__lte=end_date)
+    def normalized_close_history(self, start_date: date, end_date: date = date.today()) -> QuerySet['DailyStockHistory']:
         return DailyStockHistory.objects \
-            .get_normalized_close(start_date=start_date, symbol=self.symbol) \
-            .filter(filter) \
+            .get_normalized_close(
+                symbol=self.symbol,
+                start_date=start_date,
+                end_date=end_date
+                ) \
             .order_by('date')
 
     def __str__(self):

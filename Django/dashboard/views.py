@@ -33,7 +33,8 @@ def stock_quote(request):
     # Get DailyStockHistory for each symbol
     stocks = []
     for symbol in symbols:
-        stock_history = DailyStockHistory.objects.get_normalized_close(formatted_date, symbol).order_by('date')
+        stock_history = DailyStockHistory.objects.get_normalized_close(
+            symbol=symbol, start_date=formatted_date).order_by('date')
         stocks.append({'symbol': symbol, 'stock_history': stock_history})
     # Using line chart JS
     stock_history = get_my_position_stock_normalized()

@@ -31,7 +31,7 @@ class DailyStockHistoryViewSet(ModelViewSet):
         serializer_input = InputsNormalizedCloseSerializer(data={'start_date': start_date, 'symbol': symbol})
         serializer_input.is_valid(raise_exception=True)
         # Get the normalized close price
-        stock_history = DailyStockHistory.objects.get_normalized_close(start_date, symbol)
+        stock_history = DailyStockHistory.objects.get_normalized_close(symbol=symbol, start_date=start_date)
         serializer_output = NormalizedCloseSerializer(stock_history, many=True)
         return Response(serializer_output.data, status=HTTP_200_OK)
 
@@ -47,7 +47,7 @@ class DailyStockHistoryViewSet(ModelViewSet):
         serializer_input = InputsNormalizedCloseSerializer(data={'start_date': start_date, 'symbol': symbol})
         serializer_input.is_valid(raise_exception=True)
         # Get the normalized close price
-        queryset = DailyStockHistory.objects.get_normalized_close(start_date, symbol)
+        queryset = DailyStockHistory.objects.get_normalized_close(symbol=symbol, start_date=start_date)
         if not queryset:
             return Response({'error': 'No data found'}, status=HTTP_204_NO_CONTENT)
         # Convert to a DateValueSerializer
@@ -82,7 +82,7 @@ def multiple_normalized_companies(request):
     # Get DailyStockHistory for each symbol
     stocks = []
     for symbol in symbols:
-        stock_history = DailyStockHistory.objects.get_normalized_close('2024-01-01', symbol)
+        stock_history = DailyStockHistory.objects.get_normalized_close(symbol=symbol, start_date='2024-01-01')
         stocks.append({'symbol': symbol, 'stock_history': stock_history})
     return render(request, 'multiple_normalized_companies.html', {'stocks': stocks})
 
@@ -153,7 +153,7 @@ class FixedDataView(APIView):
         serializer_input = InputsNormalizedCloseSerializer(data={'start_date': start_date, 'symbol': symbol})
         serializer_input.is_valid(raise_exception=True)
         # Get the normalized close price
-        queryset = DailyStockHistory.objects.get_normalized_close(start_date, symbol)
+        queryset = DailyStockHistory.objects.get_normalized_close(symbol=symbol, start_date=start_date)
         if not queryset:
             return Response({'error': 'No data found'}, status=HTTP_204_NO_CONTENT)
         # Convert to a DateValueSerializer

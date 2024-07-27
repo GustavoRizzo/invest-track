@@ -22,7 +22,10 @@ def get_my_position_stock_normalized() -> dict:
     # Get DailyStockHistory for each symbol
     list_stock_history = []
     for symbol in symbols:
-        queryset_normalized = DailyStockHistory.objects.get_normalized_close(formatted_date, symbol).order_by('date')
+        queryset_normalized = DailyStockHistory.objects.get_normalized_close(
+            symbol = symbol, 
+            start_date = formatted_date
+            ).order_by('date')
         if queryset_normalized:
             list = queryset_normalized.annotate(value=F('normalized_close')).values('date', 'value')
             date_value = DateValueSerializer(list, many=True)
