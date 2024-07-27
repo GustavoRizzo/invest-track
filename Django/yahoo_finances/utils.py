@@ -1,16 +1,17 @@
 from django.db.models import F
-from rest_framework.response import Response
 from datetime import date
 from rest_framework.serializers import Serializer
 from .models import Company
 from .serializers import DateValueSerializer, StockHistorySerializer
 
 
-def get_company_serializer_normalized_history_data(company: Company, start_date: date, end_date: date = date.today()) -> tuple[Serializer, bool]:
+def get_company_serializer_normalized_history_data(company: Company, start_date: date, end_date: date = date.today()) \
+     -> tuple[Serializer, bool]:
     """
     Recive a Company object and return the normalized close history for the company.
     Return:
-        - serializer (Serializer): The normalized close history for the company of type StockHistorySerializer, or an error message.
+        - serializer (Serializer): The normalized close history for the company of type StockHistorySerializer, or an
+        error message.
         - err (bool): True if there is an error, False otherwise.
     """
     assert isinstance(company, Company), f"company must be a Company object, not {type(company)}"

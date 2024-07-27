@@ -1,5 +1,4 @@
-import time
-from datetime import datetime, date
+from datetime import date
 from django.db.models import F
 from django.shortcuts import render, get_object_or_404
 from drf_yasg.utils import swagger_auto_schema
