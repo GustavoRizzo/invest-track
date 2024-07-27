@@ -21,14 +21,15 @@
             },
             loading: true,
             fetchData() {
-                fetch('{% url 'yahoo_finances:fixed_data' %}', {
+                fetch('{% url 'yahoo_finances:stock_normalized_history' %}', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Token ${this.auth_token}`,
                     },
                     body: JSON.stringify({
-                        'symbols': ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA'],
+                        'symbols': ['VALE3.SA', 'PETR4.SA', 'MGLU3.SA'],
+                        'start_date': '2024-01-27',
                     })
                 })
                 .then(response => response.json())

@@ -19,43 +19,7 @@ class DailyStockHistoryViewSet(ModelViewSet):
     queryset = DailyStockHistory.objects.all()
     serializer_class = DailyStockHistorySerializer
     permission_classes = [IsAuthenticated]
-    http_method_names = ['get', 'post',]
-
-    @swagger_auto_schema(request_body=InputsNormalizedCloseSerializer, responses={200: NormalizedCloseSerializer})
-    @action(detail=False, methods=['post'], url_path='normalized', url_name='normalized',
-            permission_classes=[IsAuthenticated])
-    def get_normalized_close(self, request):
-        # Get the input data
-        start_date = request.data.get('start_date')
-        symbol = request.data.get('symbol')
-        # Validate the input
-        serializer_input = InputsNormalizedCloseSerializer(data={'start_date': start_date, 'symbol': symbol})
-        serializer_input.is_valid(raise_exception=True)
-        # Get the normalized close price
-        stock_history = DailyStockHistory.objects.get_normalized_close(symbol=symbol, start_date=start_date)
-        serializer_output = NormalizedCloseSerializer(stock_history, many=True)
-        return Response(serializer_output.data, status=HTTP_200_OK)
-
-    @swagger_auto_schema(request_body=InputsNormalizedCloseSerializer,
-                         responses={200: StockHistorySerializer(many=True)})
-    @action(detail=False, methods=['post'], url_path='normalized-v2', url_name='normalized-v2',
-            permission_classes=[IsAuthenticated])
-    def get_normalized_close_v2(self, request):
-        # Get the input data
-        start_date = request.data.get('start_date')
-        symbol = request.data.get('symbol')
-        # Validate the input
-        serializer_input = InputsNormalizedCloseSerializer(data={'start_date': start_date, 'symbol': symbol})
-        serializer_input.is_valid(raise_exception=True)
-        # Get the normalized close price
-        queryset = DailyStockHistory.objects.get_normalized_close(symbol=symbol, start_date=start_date)
-        if not queryset:
-            return Response({'error': 'No data found'}, status=HTTP_204_NO_CONTENT)
-        # Convert to a DateValueSerializer
-        list = queryset.annotate(value=F('normalized_close')).values('date', 'value')
-        data_value = DateValueSerializer(list, many=True)
-        serializer_output = StockHistorySerializer({'symbol': symbol, 'history': data_value.data})
-        return Response(serializer_output.data, status=HTTP_200_OK)
+    http_method_names = []
 
 
 def company_details(request, company_id):
@@ -93,75 +57,6 @@ class CompanyViewSet(ModelViewSet):
     serializer_class = CompanySerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
     http_method_names = ['get']
-
-
-class FixedDataView(APIView):
-    @swagger_auto_schema(responses={200: StockHistorySerializer(many=True)})
-    def post(self, request):
-        """
-        Get fixed data for the companies VALE3.SA and ASAI3.SA
-        """
-        data = [
-            {
-                "symbol": "VALE3.SA",
-                "history": [
-                    {"date": "2024-02-01", "value": 100},
-                    {"date": "2024-02-02", "value": 97.96886582653818},
-                    {"date": "2024-02-05", "value": 97.12379540400296},
-                    {"date": "2024-02-06", "value": 98.84358784284656},
-                    {"date": "2024-02-07", "value": 99.03632320237213},
-                    {"date": "2024-02-08", "value": 98.16160118606375},
-                    {"date": "2024-02-09", "value": 97.73165307635286},
-                    {"date": "2024-02-14", "value": 97.4351371386212},
-                    {"date": "2024-02-15", "value": 97.12379540400296},
-                    {"date": "2024-02-16", "value": 100.81541882876205},
-                    {"date": "2024-02-19", "value": 100.05930318754633},
-                    {"date": "2024-02-20", "value": 97.8650852483321},
-                    {"date": "2024-02-21", "value": 98.60637509266122},
-                    {"date": "2024-02-22", "value": 99.6590066716086},
-                    {"date": "2024-02-23", "value": 99.89621942179392}
-                ]
-            },
-            {
-                "symbol": "ASAI3.SA",
-                "history": [
-                    {"date": "2024-02-01", "value": 100},
-                    {"date": "2024-02-02", "value": 97.96886582653818},
-                    {"date": "2024-02-05", "value": 97.12379540400296},
-                    {"date": "2024-02-06", "value": 98.84358784284656},
-                    {"date": "2024-02-07", "value": 99.03632320237213},
-                    {"date": "2024-02-08", "value": 99.16160118606375},
-                    {"date": "2024-02-09", "value": 94.73165307635286},
-                    {"date": "2024-02-14", "value": 97.4351371386212},
-                    {"date": "2024-02-15", "value": 97.12379540400296},
-                    {"date": "2024-02-16", "value": 101.81541882876205},
-                    {"date": "2024-02-19", "value": 100.05930318754633},
-                    {"date": "2024-02-20", "value": 105.8650852483321},
-                    {"date": "2024-02-21", "value": 98.60637509266122},
-                    {"date": "2024-02-22", "value": 99.6590066716086},
-                    {"date": "2024-02-23", "value": 99.89621942179392}
-                ]
-            }
-        ]
-        serializer = StockHistorySerializer(data, many=True)
-        return Response(serializer.data, status=HTTP_200_OK)
-
-    def get_normalized_close_v2(self, request):
-        # Get the input data
-        start_date = request.data.get('start_date')
-        symbol = request.data.get('symbol')
-        # Validate the input
-        serializer_input = InputsNormalizedCloseSerializer(data={'start_date': start_date, 'symbol': symbol})
-        serializer_input.is_valid(raise_exception=True)
-        # Get the normalized close price
-        queryset = DailyStockHistory.objects.get_normalized_close(symbol=symbol, start_date=start_date)
-        if not queryset:
-            return Response({'error': 'No data found'}, status=HTTP_204_NO_CONTENT)
-        # Convert to a DateValueSerializer
-        list = queryset.annotate(value=F('normalized_close')).values('date', 'value')
-        data_value = DateValueSerializer(list, many=True)
-        serializer_output = StockHistorySerializer({'symbol': symbol, 'history': data_value.data})
-        return Response(serializer_output.data, status=HTTP_200_OK)
 
 
 class StockHistoryView(APIView):
