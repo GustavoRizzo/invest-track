@@ -9,7 +9,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_200_OK, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
 
-from .utils import get_company_serializer_normalized_history_data
+from .utils import get_company_serializer_history_data, get_company_serializer_normalized_history_data
 from .models import Company, DailyStockHistory
 from .serializers import CompanySerializer, DailyStockHistorySerializer, DateValueSerializer, \
     InputsNormalizedCloseSerializer, NormalizedCloseSerializer, StockHistorySerializer
@@ -180,7 +180,7 @@ class StockHistoryView(APIView):
         list_serializer_data = []
         # Get serialized data for each company
         for company in companys:
-            serializer_output, err = get_company_serializer_normalized_history_data(
+            serializer_output, err = get_company_serializer_history_data(
                 company=company,
                 start_date=serializer_input.validated_data['start_date'],
                 end_date=serializer_input.validated_data.get('end_date', date.today())
