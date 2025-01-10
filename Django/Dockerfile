@@ -13,21 +13,24 @@ ARG PYTHON_VERSION
 RUN mkdir /app
 WORKDIR /app
 
-COPY ./requirements.txt requirements.txt
-RUN pip install --upgrade pip setuptools && pip install -r requirements.txt
+RUN pip install uv
+
+COPY ./pyproject.toml pyproject.toml
+COPY ./uv.lock uv.lock
+RUN uv sync
 
 COPY ./manage.py ./manage.py
 COPY ./ ./
 
 # Static files
-RUN python manage.py collectstatic --noinput
+RUN uv run python manage.py collectstatic --noinput
 
 ## DEV is used in development environment
 FROM django as dev
 
 # Run worker and server
-CMD python manage.py rqworker & \
-    python manage.py runserver 0.0.0.0:8000
+CMD uv run python manage.py rqworker & \
+    uv run python manage.py runserver 0.0.0.0:8000
 
 ## PROD contains the frontend application served by nginx
 FROM django AS prod
@@ -36,6 +39,6 @@ FROM django AS prod
 EXPOSE 80
 
 # Run worker, server and nginx
-CMD python manage.py rqworker & \
+CMD uv run python manage.py rqworker & \
     gunicorn -c gunicorn.py "core.wsgi:application" && \
     nginx -g "daemon off;"
