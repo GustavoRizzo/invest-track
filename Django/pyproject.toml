@@ -62,29 +62,35 @@ extend-ignore = ["F401", "F403", "F405"]
 max-complexity = 13
 max-line-length = 120
 
-[tool.taskipy.variables]
-DATABASE = "postgres"
-DOCKER_CMD = {var = "{DOCKER_ENV} docker", recursive = true}
-DOCKER_COMPOSE = {var = "{DOCKER_CMD} compose", recursive = true}
-DOCKER_COMPOSE_DEV = {var = "{DOCKER_COMPOSE} -f docker-compose-dev.yml", recursive = true}
-DOCKER_ENV = {var = "PYTHON_VERSION={PYTHON_VERSION}", recursive = true}
-PYTHON_VERSION = "3.12"
-SERVICES = "backend postgres"
-SERVICES_DEV = "backend-dev postgres"
-
 [tool.taskipy.settings]
 use_vars = true
 
-[tool.taskipy.tasks]
-build = {cmd = "{DOCKER_COMPOSE} build {SERVICES}", help = "Build images of production services"}
-build-dev = {cmd = "{DOCKER_COMPOSE_DEV} build {SERVICES_DEV}", help = "Build images of development services"}
-createsuperuser = {cmd = "python ./manage.py createsuperuser", help = "Create a superuser"}
-eco = {cmd = "echo ola", help = "Run the linter and tests"}
-lint = {cmd = "poetry run flake8 .", help = "Run the linter"}
+[tool.taskipy.variables]
+# Variables
+FIXTURES = ""
 
-migrate = {cmd = "python ./manage.py migrate", help = "Run the migrations"}
-server = {cmd = "python ./manage.py runserver", help = "Run the server"}
-setup = {cmd = "task migrate && task createsuperuser", help = "Run the migrations and create a superuser"}
-up = {cmd = "{DOCKER_COMPOSE} up -d --force-recreate {SERVICES}", help = "Start production services"}
-up-database = {cmd = "{DOCKER_COMPOSE} up -d {DATABASE}", help = "Start the database"}
-up-dev = {cmd = "{DOCKER_COMPOSE_DEV} up -d --force-recreate {SERVICES_DEV}", help = "Start development services"}
+# Commands Variables
+C_CREATE_SUPERUSER = "poetry run python ./manage.py createsuperuser"
+C_LINT = "poetry run flake8"
+C_LOADDATA = {var = "poetry run python ./manage.py loaddata {FIXTURES}", recursive = true}
+C_MIGRATE = "poetry run python ./manage.py migrate"
+C_RESET_DB = "poetry run python ./manage.py reset_db"
+C_RUN_SERVER = "poetry run python ./manage.py runserver"
+C_SETUP = "task migrate && task loaddata && task createsuperuser"
+C_TEST = "PYTHONBREAKPOINT=ipdb.set_trace poetry run python ./manage.py test --settings=kernel.settings_test"
+C_UPDATE_PERMISSIONS_GROUPS = "poetry run python manage.py dumpdata auth.Group --indent 4 --natural-foreign > auth/fixtures/groups.json"
+
+[tool.taskipy.tasks]
+compile-files-translation = {cmd = "poetry run python ./manage.py compilemessages", help = "Compile the translation files"}
+createsuperuser = {cmd = "{C_CREATE_SUPERUSER}", help = "Create a superuser"}
+lint = {cmd = "{C_LINT}", help = "Lint the code"}
+loaddata = {cmd = "{C_LOADDATA}", help = "Load the fixtures"}
+migrate = {cmd = "{C_MIGRATE}", help = "Run the migrations"}
+ruff_fix_lint = {cmd = "{C_RUFF_FIX}", help = "Lint with ruff the code"}
+ruff_lint = {cmd = "{C_RUFF}", help = "Lint with ruff the code"}
+runserver = {cmd = "{C_RUN_SERVER}", help = "Run the server"}
+setup = {cmd = "{C_SETUP}", help = "Run the migrations and create a superuser"}
+test = {cmd = "{C_TEST}", help = "Run the tests"}
+test-parallel = {cmd = "{C_TEST} --parallel 15", help = "Run the tests in parallel"}
+update-files-translation = {cmd = "poetry run python ./manage.py makemessages -a", help = "Update the translation files"}
+update-permissions-groups = {cmd = "{C_UPDATE_PERMISSIONS_GROUPS}", help = "Update the permissions groups"}
