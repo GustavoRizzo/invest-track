@@ -35,24 +35,26 @@ make setup
 To create the local environment:
 
 ```shell
-pip install uv
-uv sync
+pyenv local && pyenv install
+python3 -m venv venv
+source venv/bin/activate
+pip install pip --upgrade
+pip install poetry
+poetry install
 ```
 
 to run the first time:
 
 ```shell
 cd Django
-uv run python manage.py migrate
-uv run python manage.py createsuperuser
-uv run python manage.py runserver
+poetry task setup
 ```
 
 ## To load all Company data for you StockPosition
 Run in the Django shell:
 
 ```shell
-uv run python manage.py shell
+poetry run python manage.py shell
 ```
 
 ```python
