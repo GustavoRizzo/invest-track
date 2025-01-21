@@ -94,3 +94,6 @@ test = {cmd = "{C_TEST}", help = "Run the tests"}
 test-parallel = {cmd = "{C_TEST} --parallel 15", help = "Run the tests in parallel"}
 update-files-translation = {cmd = "poetry run python ./manage.py makemessages -a", help = "Update the translation files"}
 update-permissions-groups = {cmd = "{C_UPDATE_PERMISSIONS_GROUPS}", help = "Update the permissions groups"}
+
+# imports
+import-infomoney = {cmd = "poetry run python ./manage.py import_infomoney", help = "Import infomoney data"}

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'yahoo_finances',
     'dashboard',
     'ativa_investimentos',
+    'infomoney',
 ]
 
 MIDDLEWARE = [
