@@ -1,9 +1,9 @@
 from datetime import datetime
 from django.utils.timezone import now
-import polars as pl
+import pandas as pd
 
 
-def convert_high_low_dict_to_df(api_data: dict) -> pl.DataFrame:
+def convert_high_low_dict_to_df(api_data: dict) -> pd.DataFrame:
 
     # Column names corrected
     columns = [
@@ -15,8 +15,8 @@ def convert_high_low_dict_to_df(api_data: dict) -> pl.DataFrame:
     data = api_data['aaData']
     assert len(data) > 0, "No data found in aaData"
 
-    # Convert to Polars DataFrame
-    df = pl.DataFrame(data, schema=columns, orient="row")
+    # Convert to pandas DataFrame
+    df = pd.DataFrame(data, columns=columns)
 
     # Convert columns to correct types
     df = convert_high_low_df_types(df)
@@ -33,7 +33,7 @@ def convert_to_decimal(value):
         return None
 
 
-def convert_to_date(date_str) -> datetime:
+def convert_to_date(date_str) -> datetime.date:
     # There are two possible date formats: dd/mm/yyyy or HHhMM
     has_h = '/' not in date_str
     if not has_h:
@@ -41,67 +41,45 @@ def convert_to_date(date_str) -> datetime:
             # Converte dd/mm para dd/mm/yyyy usando o ano atual
             current_year = now().year  # Get the current year
             day, month = map(int, date_str.split('/'))
-            return datetime(current_year, month, day)
+            return datetime(current_year, month, day).date()
         except (ValueError, AttributeError):
             raise ValueError(f"Invalid date: {date_str}")
     else:
         try:
             # Converte HHhMM para dd/mm/yyyy HH:MM
-            return datetime(now().year, now().month, now().day, int(date_str[:2]), int(date_str[3:]))
+            return datetime(now().year, now().month, now().day, int(date_str[:2]), int(date_str[3:])).date()
         except (ValueError, AttributeError):
             raise ValueError(f"Invalid date: {date_str}")
 
 
-def convert_high_low_df_types(df: pl.DataFrame) -> pl.DataFrame:
-    # Assume que df é seu DataFrame Polars
+def convert_high_low_df_types(df: pd.DataFrame) -> pd.DataFrame:
+    # Assume que df é seu DataFrame pandas
 
     # Converte a coluna date
-    df = df.with_columns(
-        pl.col('date').map_elements(convert_to_date,
-                                    return_dtype=pl.Datetime).alias('date')
-    )
+    df['date'] = df['date'].apply(convert_to_date)
 
     # Converte a coluna current_value
-    df = df.with_columns(
-        pl.col('current_value').map_elements(
-            convert_to_decimal, return_dtype=pl.Float64
-        ).round(2).alias('current_value')
-    )
+    df['current_value'] = df['current_value'].apply(convert_to_decimal).round(2)
 
     # Converte a coluna var_12_months
-    df = df.with_columns(
-        pl.col('var_12_months').map_elements(
-            convert_to_decimal, return_dtype=pl.Float64
-        ).round(2).alias('var_12_months')
-    )
+    df['var_12_months'] = df['var_12_months'].apply(convert_to_decimal).round(2)
 
     # Converte a coluna min
-    df = df.with_columns(
-        pl.col('min').map_elements(
-            convert_to_decimal, return_dtype=pl.Float64
-        ).round(2).alias('min')
-    )
+    df['min'] = df['min'].apply(convert_to_decimal).round(2)
 
     # Converte a coluna max
-    df = df.with_columns(
-        pl.col('max').map_elements(
-            convert_to_decimal, return_dtype=pl.Float64
-        ).round(2).alias('max')
-    )
+    df['max'] = df['max'].apply(convert_to_decimal).round(2)
 
     # Converte a coluna volume
-    df = df.with_columns(
-        pl.col('volume').map_elements(
-            convert_to_decimal, return_dtype=pl.Float64
-        ).round(2).alias('volume')
-    )
+    df['volume'] = df['volume'].apply(convert_to_decimal).round(2)
+
     return df
 
 
-def convert_high_low_df_to_model(df: pl.DataFrame, save: bool = False) -> list:
+def convert_high_low_df_to_model(df: pd.DataFrame, save: bool = False) -> list:
     from .models import HighLow
     # Covert df to list of dictionaries
-    data = df.to_dicts()
+    data = df.to_dict(orient='records')
     breakpoint()
     highlow_instances = []
     for row in data:

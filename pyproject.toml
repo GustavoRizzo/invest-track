@@ -2,6 +2,7 @@
 authors = ["Gustavo Rizzo S M de Albuquerque <grizzo.albu@gmail.com>"]
 description = ""
 name = "invest-track"
+package-mode = false
 readme = "README.md"
 version = "0.1.0"
 
@@ -21,7 +22,6 @@ gunicorn = ">=23.0.0"
 httpx = "^0.28.1"
 ipdb = "^0.13.13"
 model-bakery = ">=1.20.1"
-polars = "^1.20.0"
 psycopg2-binary = ">=2.9.10"
 python = "^3.13.1"
 requests = ">=2.32.3"
@@ -29,6 +29,7 @@ selenium = ">=4.27.1"
 slippers = ">=0.6.2"
 taskipy = "1.13"
 yfinance = ">=0.2.51"
+pandas = "^2.2.3"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.1.1"

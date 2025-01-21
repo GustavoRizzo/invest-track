@@ -13,7 +13,7 @@ ARG PYTHON_VERSION
 RUN mkdir /app
 WORKDIR /app
 
-RUN pip install poetry
+RUN pip install "poetry<2.0"
 
 COPY ./pyproject.toml pyproject.toml
 COPY ./poetry.lock poetry.lock
@@ -22,7 +22,6 @@ RUN poetry install
 COPY . /app/
 
 # Static files
-run poetry --version
 RUN poetry run ./manage.py collectstatic --noinput
 
 ## DEV is used in development environment
