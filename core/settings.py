@@ -218,3 +218,4 @@ URL_BASE_ALPHAVANTAGE = 'https://www.alphavantage.co/query'
 
 # Infomoney
 URL_INFOMONEY_ALTAS_BAIXAS = 'https://www.infomoney.com.br/ferramentas/altas-e-baixas/'
+URL_INFOMONEY_ADMIN_AJAX = "https://www.infomoney.com.br/wp-admin/admin-ajax.php"

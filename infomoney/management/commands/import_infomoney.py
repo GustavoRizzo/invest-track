@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from datetime import timedelta
 
-from infomoney.apis import fetch_obj_tool_data
+from infomoney.apis import fetch_obj_tool_data, fetch_infomoney_hight_low
 
 
 class Command(BaseCommand):
@@ -11,7 +11,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         print("Start import_infomoney")
-        obj_tool_data = fetch_obj_tool_data()
-        key = obj_tool_data["altas_e_baixas_table_nonce"]
-        print(f"key 'altas_e_baixas_table_nonce': {key}")
+        data = fetch_infomoney_hight_low()
+        print(f"\n\n data: {data}")
         print("End import_infomoney")
