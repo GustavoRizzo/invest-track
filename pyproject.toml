@@ -1,10 +1,18 @@
-[tool.poetry]
-authors = ["Gustavo Rizzo <grizzo.albu@gmail.com>"]
+[project]
+authors = [
+  {name = "Gustavo Rizzo S M de Albuquerque", email = "grizzo.albu@gmail.com"},
+]
+dependencies = []
 description = ""
 name = "invest-track"
 package-mode = false
 readme = "README.md"
+requires-python = ">=3.13"
 version = "0.1.0"
+
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 
 [tool.poetry.dependencies]
 django = ">=5.1.4"
