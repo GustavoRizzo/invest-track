@@ -46,7 +46,6 @@ poetry install
 to run the first time:
 
 ```shell
-cd Django
 poetry task setup
 ```
 

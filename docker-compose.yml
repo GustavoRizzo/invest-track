@@ -3,7 +3,7 @@ version: "3.9"
 services:
   django-application: &django
     build:
-      context: "./Django"
+      context: "./"
       dockerfile: "Dockerfile"
       args:
         - PYTHON_VERSION

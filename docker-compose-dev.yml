@@ -11,6 +11,6 @@ services:
         build:
             target: dev
         volumes:
-            - "./Django:/app"
+            - "./:/app"
         # Force the container to stay alive
         tty: true

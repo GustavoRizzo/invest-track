@@ -13,24 +13,24 @@ ARG PYTHON_VERSION
 RUN mkdir /app
 WORKDIR /app
 
-RUN pip install uv
+RUN pip install poetry
 
 COPY ./pyproject.toml pyproject.toml
-COPY ./uv.lock uv.lock
-RUN uv sync
+COPY ./poetry.lock poetry.lock
+RUN poetry install
 
-COPY ./manage.py ./manage.py
-COPY ./ ./
+COPY . /app/
 
 # Static files
-RUN uv run python manage.py collectstatic --noinput
+run poetry --version
+RUN poetry run ./manage.py collectstatic --noinput
 
 ## DEV is used in development environment
 FROM django as dev
 
 # Run worker and server
-CMD uv run python manage.py rqworker & \
-    uv run python manage.py runserver 0.0.0.0:8000
+CMD poetry run python manage.py rqworker & \
+    poetry run python manage.py runserver 0.0.0.0:8000
 
 ## PROD contains the frontend application served by nginx
 FROM django AS prod
@@ -39,6 +39,6 @@ FROM django AS prod
 EXPOSE 80
 
 # Run worker, server and nginx
-CMD uv run python manage.py rqworker & \
+CMD poetry run python manage.py rqworker & \
     gunicorn -c gunicorn.py "core.wsgi:application" && \
     nginx -g "daemon off;"
