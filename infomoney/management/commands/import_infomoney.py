@@ -15,6 +15,6 @@ class Command(BaseCommand):
         api_data = fetch_infomoney_high_low()
         df = convert_high_low_dict_to_df(api_data)
         print(f"\n\n df: {df.head()}\n\n")
-        list_instance_model = convert_high_low_df_to_model(df)
+        list_instance_model = convert_high_low_df_to_model(df, save=True)
         print(f"\n\n list_instance_model: {list_instance_model}\n\n")
         print("End import_infomoney")

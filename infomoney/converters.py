@@ -98,7 +98,7 @@ def convert_high_low_df_types(df: pl.DataFrame) -> pl.DataFrame:
     return df
 
 
-def convert_high_low_df_to_model(df: pl.DataFrame) -> list:
+def convert_high_low_df_to_model(df: pl.DataFrame, save: bool = False) -> list:
     from .models import HighLow
     # Covert df to list of dictionaries
     data = df.to_dicts()
@@ -106,4 +106,6 @@ def convert_high_low_df_to_model(df: pl.DataFrame) -> list:
     highlow_instances = []
     for row in data:
         highlow_instances.append(HighLow(**row))
+    if save:
+        HighLow.objects.bulk_create(highlow_instances)
     return highlow_instances
