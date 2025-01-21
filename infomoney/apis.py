@@ -75,8 +75,8 @@ def fetch_infomoney_data(key_altas_e_baixas_table_nonce: str) -> dict:
     }
     headers = {
         "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": """Mozilla/5.0 (Windows NT 10.0; Win64; x64)
-        AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"""
+        "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64)" +
+                       "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36")
     }
 
     try:
