@@ -215,3 +215,6 @@ LOGGING = {
 # Alfavantage
 ALPHAVANTAGE_API_KEY = os.environ.get('ALPHAVANTAGE_API_KEY', None)
 URL_BASE_ALPHAVANTAGE = 'https://www.alphavantage.co/query'
+
+# Infomoney
+URL_INFOMONEY_ALTAS_BAIXAS = 'https://www.infomoney.com.br/ferramentas/altas-e-baixas/'

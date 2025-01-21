@@ -26,6 +26,7 @@ selenium = ">=4.27.1"
 slippers = ">=0.6.2"
 taskipy = "1.13"
 yfinance = ">=0.2.51"
+httpx = "^0.28.1"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.1.1"
