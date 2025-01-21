@@ -1,7 +1,7 @@
 from core.base.test import BaseAPITestCase
 from rest_framework import status
 
-from infomoney.converters import convert_infomoney_high_low_to_df
+from infomoney.converters import convert_high_low_dict_to_df
 
 mack_api_data = {
     'sEcho': '1',
@@ -23,11 +23,11 @@ class InfomoneyTest(BaseAPITestCase):
         # setUpTestData: Run once to set up non-modified data for all class methods.
         super().setUpTestData()
 
-    def test_convert_infomoney_high_low_to_df(self):
+    def test_convert_high_low_dict_to_df(self):
         # Arrange
         data = mack_api_data
         # Act
-        df = convert_infomoney_high_low_to_df(data)
+        df = convert_high_low_dict_to_df(data)
 
         print(df.head())
         # Assert
