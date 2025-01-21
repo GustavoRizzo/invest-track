@@ -6,6 +6,9 @@ FROM python:${PYTHON_VERSION}-alpine AS base
 RUN apk update && apk upgrade
 RUN apk add --update build-base gcc make git bash curl libffi-dev openssl-dev zlib zlib-dev jpeg-dev freetype freetype-dev
 
+# Install requiremnts of lib Polars
+RUN apk add --no-cache rust cargo musl-dev python3-dev cmake
+
 # Create the APP Image
 FROM base as django
 ARG PYTHON_VERSION
@@ -13,24 +16,24 @@ ARG PYTHON_VERSION
 RUN mkdir /app
 WORKDIR /app
 
-RUN pip install poetry
+RUN pip install uv
 
 COPY ./pyproject.toml pyproject.toml
-COPY ./poetry.lock poetry.lock
-RUN poetry install
+# COPY ./poetry.lock poetry.lock
+# RUN poetry install
+RUN uv sync
 
 COPY . /app/
 
 # Static files
-run poetry --version
-RUN poetry run ./manage.py collectstatic --noinput
+RUN uv run ./manage.py collectstatic --noinput
 
 ## DEV is used in development environment
 FROM django as dev
 
 # Run worker and server
-CMD poetry run python manage.py rqworker & \
-    poetry run python manage.py runserver 0.0.0.0:8000
+CMD uv run python manage.py rqworker & \
+    uv run python manage.py runserver 0.0.0.0:8000
 
 ## PROD contains the frontend application served by nginx
 FROM django AS prod
@@ -39,6 +42,6 @@ FROM django AS prod
 EXPOSE 80
 
 # Run worker, server and nginx
-CMD poetry run python manage.py rqworker & \
+CMD uv run python manage.py rqworker & \
     gunicorn -c gunicorn.py "core.wsgi:application" && \
     nginx -g "daemon off;"
