@@ -75,7 +75,8 @@ def fetch_infomoney_data(key_altas_e_baixas_table_nonce: str) -> dict:
     }
     headers = {
         "Content-Type": "application/x-www-form-urlencoded",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+        "User-Agent": """Mozilla/5.0 (Windows NT 10.0; Win64; x64)
+        AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"""
     }
 
     try:
@@ -96,7 +97,7 @@ def fetch_infomoney_data(key_altas_e_baixas_table_nonce: str) -> dict:
         return None
 
 
-def fetch_infomoney_hight_low() -> dict:
+def fetch_infomoney_high_low() -> dict:
     # Call the website to get a token key
     obj_tool_data = fetch_obj_tool_data()
     assert obj_tool_data, "Error fetching obj_tool_data"
