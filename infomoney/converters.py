@@ -2,6 +2,8 @@ from datetime import datetime
 from django.utils.timezone import now
 import pandas as pd
 
+from core.utils import convert_dict_nan_values_to_none, convert_to_decimal
+
 
 def convert_high_low_dict_to_df(api_data: dict) -> pd.DataFrame:
 
@@ -22,15 +24,6 @@ def convert_high_low_dict_to_df(api_data: dict) -> pd.DataFrame:
     df = convert_high_low_df_types(df)
 
     return df
-
-
-def convert_to_decimal(value):
-    try:
-        # Remove possíveis espaços e substitui vírgula por ponto
-        value = value.strip().replace(',', '.')
-        return float(value)
-    except (ValueError, AttributeError):
-        return None
 
 
 def convert_to_date(date_str) -> datetime.date:
@@ -75,12 +68,15 @@ def convert_high_low_df_types(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
-
 def convert_high_low_df_to_model(df: pd.DataFrame, save: bool = False) -> list:
     from .models import HighLow
+
     # Covert df to list of dictionaries
     data = df.to_dict(orient='records')
-    breakpoint()
+
+    # Clean Dict
+    data = convert_dict_nan_values_to_none(data)
+
     highlow_instances = []
     for row in data:
         highlow_instances.append(HighLow(**row))

@@ -17,7 +17,7 @@ class HighLow(BaseModel):
         max_digits=10, decimal_places=2, null=True)
     min = models.DecimalField(max_digits=10, decimal_places=2, null=True)
     max = models.DecimalField(max_digits=10, decimal_places=2, null=True)
-    volume = models.DecimalField(max_digits=10, decimal_places=2, null=True)
+    volume = models.DecimalField(max_digits=15, decimal_places=2, null=True)
 
     def __str__(self):
         return f"{self.symbol} - {self.date} - R${self.current_value:.2f}"
